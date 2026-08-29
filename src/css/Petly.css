@@ -1,0 +1,1217 @@
+
+:root {
+  --fondo: #ffffff;
+  --texto: #252525;
+  --titulo: #b42228;
+  --marron: #b5651d;
+  --marron-hover: #8f4f17;
+  --crema: #fff8f2;
+  --borde: #e5ded7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: "Poppins", sans-serif;
+}
+
+button,
+input {
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* ================================
+   NAV PRINCIPAL
+================================ */
+
+.petly-navbar {
+  background-color: var(--marron);
+  padding: 10px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.petly-logo {
+  color: #ffffff !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.petly-logo-icon {
+  margin-right: 6px;
+  font-size: 1.15rem;
+}
+
+.petly-navbar .nav-link {
+  color: #ffffff !important;
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.petly-navbar .nav-link:hover,
+.petly-navbar .nav-link.active {
+  color: var(--crema) !important;
+}
+
+.petly-navbar .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.petly-navbar .navbar-toggler-icon {
+  filter: brightness(0) invert(1);
+}
+
+.petly-navbar-category .dropdown-toggle {
+  color: #ffffff !important;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.petly-navbar-category .dropdown-menu {
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.petly-navbar-category .dropdown-item {
+  color: var(--texto);
+  border-radius: 5px;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+}
+
+.petly-navbar-category .dropdown-item:hover,
+.petly-navbar-category .dropdown-item.active {
+  background-color: var(--crema);
+  color: var(--marron);
+}
+
+.petly-nav-icon {
+  font-size: 1.1rem !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+
+/* ================================
+   SEGUNDO NAV
+================================ */
+
+.petly-category-bar {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--borde);
+}
+
+.petly-category-content {
+  min-height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+}
+
+.petly-categories .dropdown-toggle {
+  color: var(--texto) !important;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.88rem;
+}
+
+.petly-categories .dropdown-toggle:hover {
+  color: var(--marron) !important;
+}
+
+.petly-categories .dropdown-menu {
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.petly-categories .dropdown-item {
+  color: var(--texto);
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+
+.petly-categories .dropdown-item:hover,
+.petly-categories .dropdown-item.active {
+  background-color: var(--crema);
+  color: var(--marron);
+}
+
+
+/* ================================
+   BUSCADOR
+================================ */
+
+.petly-search {
+  display: flex;
+  flex: 1;
+  max-width: 520px;
+  margin: 0;
+}
+
+.petly-search .form-control {
+  height: 38px;
+  border: 1px solid var(--borde);
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+
+  color: var(--texto);
+  font-size: 0.82rem;
+}
+
+.petly-search .form-control:focus {
+  border-color: var(--marron);
+  box-shadow: 0 0 0 2px rgba(181, 101, 29, 0.1);
+}
+
+.petly-btn-search {
+  height: 38px;
+
+  padding: 0 18px;
+
+  background-color: var(--marron);
+  border: 1px solid var(--marron);
+
+  color: #ffffff;
+
+  border-radius: 0 6px 6px 0;
+
+  white-space: nowrap;
+
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.petly-btn-search:hover {
+  background-color: var(--marron-hover);
+  border-color: var(--marron-hover);
+}
+
+
+/* ================================
+   TITULOS
+================================ */
+
+.petly-title {
+  color: var(--titulo);
+  font-weight: 700;
+}
+
+.petly-subtitle {
+  color: #666666;
+  font-size: 0.92rem;
+}
+
+
+/* ================================
+   BOTONES
+================================ */
+
+.petly-btn {
+  background-color: var(--marron) !important;
+  border: 1px solid var(--marron) !important;
+
+  color: #ffffff !important;
+
+  border-radius: 7px !important;
+
+  padding: 10px 20px;
+
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.petly-btn:hover {
+  background-color: var(--marron-hover) !important;
+  border-color: var(--marron-hover) !important;
+
+  transform: translateY(-1px);
+}
+
+.petly-btn-outline {
+  background-color: #ffffff !important;
+
+  border: 1px solid var(--marron) !important;
+
+  color: var(--marron) !important;
+
+  border-radius: 7px !important;
+
+  padding: 10px 20px;
+
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.petly-btn-outline:hover {
+  background-color: var(--marron) !important;
+  color: #ffffff !important;
+}
+
+
+/* ================================
+   HOME
+================================ */
+
+.petly-home {
+  background-color: #ffffff;
+  min-height: 400px;
+}
+
+
+/* ================================
+   HERO / CARRUSEL
+================================ */
+
+.petly-carousel {
+  width: 100%;
+  background-color: var(--crema);
+}
+
+.petly-carousel .carousel-item {
+  height: 360px;
+}
+
+.hero-slide {
+  width: 100%;
+  height: 360px;
+
+  display: flex;
+  align-items: center;
+
+  background-color: var(--crema);
+
+  overflow: hidden;
+}
+
+.hero-content {
+  width: 50%;
+
+  padding-left: max(7%, calc((100vw - 1140px) / 2));
+
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content h1 {
+  color: var(--titulo);
+
+  font-size: 2.35rem;
+  line-height: 1.12;
+
+  font-weight: 700;
+
+  margin-bottom: 16px;
+}
+
+.hero-content p {
+  color: var(--texto);
+
+  font-size: 0.85rem;
+  line-height: 1.6;
+
+  margin-bottom: 20px;
+}
+
+.hero-image {
+  width: 50%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  mix-blend-mode: multiply;
+}
+
+.petly-carousel .carousel-control-prev,
+.petly-carousel .carousel-control-next {
+  width: 5%;
+}
+
+.petly-carousel .carousel-indicators {
+  margin-bottom: 12px;
+}
+
+.petly-carousel .carousel-indicators button {
+  background-color: var(--marron);
+}
+
+
+/* ================================
+   CATEGORIAS
+================================ */
+
+.categorias-section {
+  margin-bottom: 48px;
+}
+
+.section-heading {
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  color: var(--titulo);
+
+  font-size: 1.15rem;
+  font-weight: 700;
+
+  margin: 0;
+}
+
+.section-heading p {
+  color: #666666;
+
+  font-size: 0.82rem;
+
+  margin: 7px 0 0;
+}
+
+.categorias-grid {
+  display: grid;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 12px;
+}
+
+.categoria-card {
+  background-color: var(--crema);
+
+  border: 1px solid transparent;
+
+  border-radius: 8px;
+
+  min-height: 105px;
+
+  padding: 15px 10px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.categoria-card:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--borde);
+
+  background-color: #ffffff;
+}
+
+.categoria-icon {
+  font-size: 2rem;
+
+  line-height: 1;
+
+  margin-bottom: 10px;
+}
+
+.categoria-card span {
+  color: var(--texto);
+
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.productos-heading {
+  margin-top: 5px;
+  margin-bottom: 22px;
+}
+
+
+/* ================================
+   CARDS
+================================ */
+
+.producto-card {
+  height: 100%;
+
+  background-color: #ffffff;
+
+  border: 1px solid var(--borde) !important;
+
+  border-radius: 10px !important;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.producto-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.img-container {
+  width: 100%;
+  height: 220px;
+
+  background-color: var(--crema);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 15px;
+}
+
+.img-container .card-img-top {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.producto-card .card-body {
+  padding: 18px;
+}
+
+.producto-nombre {
+  color: var(--texto);
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  margin-bottom: 8px;
+}
+
+.producto-precio {
+  color: var(--titulo);
+
+  font-size: 1.15rem;
+  font-weight: 700;
+
+  margin-bottom: 15px;
+}
+
+
+/* ================================
+   PRODUCTO
+================================ */
+
+.producto-page {
+  background-color: var(--crema);
+
+  padding: 60px 0;
+
+  min-height: 550px;
+}
+
+.producto-grid {
+  display: grid;
+
+  grid-template-columns: 1.1fr 1fr;
+
+  gap: 60px;
+
+  align-items: center;
+}
+
+.producto-imagen {
+  width: 100%;
+
+  background-color: #ffffff;
+
+  border: 1px solid var(--borde);
+
+  border-radius: 10px;
+
+  padding: 35px;
+
+  text-align: center;
+}
+
+.producto-imagen img {
+  width: 100%;
+
+  max-width: 500px;
+
+  height: 420px;
+
+  object-fit: contain;
+}
+
+.producto-info {
+  padding: 10px 0;
+}
+
+.producto-etiqueta {
+  display: inline-block;
+
+  color: var(--marron);
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 8px;
+}
+
+.producto-info h1 {
+  color: var(--titulo);
+
+  font-size: 2.1rem;
+
+  line-height: 1.2;
+
+  font-weight: 700;
+
+  margin-bottom: 18px;
+}
+
+.descripcion {
+  color: #555555;
+
+  font-size: 0.9rem;
+
+  line-height: 1.7;
+
+  margin-bottom: 20px;
+}
+
+.precio {
+  color: var(--titulo);
+
+  font-size: 1.8rem;
+
+  font-weight: 700;
+
+  margin: 20px 0;
+}
+
+.stock {
+  color: #666666;
+
+  font-size: 0.82rem;
+
+  margin-bottom: 15px;
+}
+
+
+/* ================================
+   CANTIDAD
+================================ */
+
+.cantidad-selector {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0;
+
+  margin: 25px 0;
+}
+
+.cantidad-selector button {
+  width: 40px;
+  height: 40px;
+
+  background-color: #ffffff;
+
+  border: 1px solid var(--borde);
+
+  color: var(--marron);
+
+  font-size: 20px;
+
+  font-weight: 600;
+}
+
+.cantidad-selector button:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.cantidad-selector button:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.cantidad-selector button:hover {
+  background-color: var(--marron);
+
+  color: #ffffff;
+
+  border-color: var(--marron);
+}
+
+.cantidad-selector input {
+  width: 55px;
+  height: 40px;
+
+  text-align: center;
+
+  border: 1px solid var(--borde);
+
+  border-left: none;
+  border-right: none;
+
+  color: var(--texto);
+
+  outline: none;
+}
+
+.botones {
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+
+/* ================================
+   CARRITO
+================================ */
+
+.petly-carrito {
+  background-color: var(--crema);
+
+  min-height: 600px;
+}
+
+.carrito-header {
+  margin-bottom: 28px;
+}
+
+.carrito-header p {
+  color: #666666;
+
+  font-size: 0.85rem;
+}
+
+.section-label {
+  display: block;
+
+  color: var(--marron);
+
+  font-size: 0.7rem;
+
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  margin-bottom: 6px;
+}
+
+.carrito-item {
+  background-color: #ffffff;
+
+  border: 1px solid var(--borde);
+
+  border-radius: 10px;
+
+  padding: 20px;
+
+  margin-bottom: 15px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.carrito-producto {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  min-width: 0;
+}
+
+.carrito-producto img {
+  width: 90px;
+  height: 90px;
+
+  flex-shrink: 0;
+
+  object-fit: contain;
+
+  background-color: var(--crema);
+
+  border-radius: 7px;
+}
+
+.carrito-producto h5 {
+  color: var(--texto);
+
+  font-size: 0.95rem;
+
+  margin-bottom: 5px;
+}
+
+.carrito-producto p {
+  color: #666666;
+
+  font-size: 0.8rem;
+
+  margin-bottom: 5px;
+}
+
+.carrito-producto strong {
+  color: var(--marron);
+
+  font-size: 0.82rem;
+}
+
+.carrito-controles {
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.cantidad-carrito {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.cantidad-carrito span {
+  min-width: 20px;
+
+  text-align: center;
+
+  font-weight: 600;
+}
+
+.cantidad-btn {
+  width: 34px;
+  height: 34px;
+
+  padding: 0 !important;
+
+  background-color: #ffffff !important;
+
+  border: 1px solid var(--marron) !important;
+
+  color: var(--marron) !important;
+
+  border-radius: 6px !important;
+}
+
+.cantidad-btn:hover {
+  background-color: var(--marron) !important;
+
+  color: #ffffff !important;
+}
+
+.carrito-controles .btn-outline-danger {
+  border-radius: 6px;
+
+  font-size: 0.75rem;
+}
+
+.carrito-resumen {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding-top: 20px;
+
+  margin-top: 25px;
+
+  border-top: 1px solid var(--borde);
+}
+
+.carrito-resumen h3 {
+  color: var(--titulo);
+
+  font-size: 1.25rem;
+
+  font-weight: 700;
+}
+
+.carrito-vacio {
+  background-color: #ffffff;
+
+  border: 1px solid var(--borde);
+
+  border-radius: 10px;
+
+  padding: 50px 30px;
+
+  text-align: center;
+}
+
+.carrito-vacio-icon {
+  font-size: 2.5rem;
+
+  margin-bottom: 15px;
+}
+
+.carrito-vacio p {
+  color: #666666;
+
+  font-size: 0.9rem;
+
+  margin-bottom: 20px;
+}
+
+
+/* ================================
+   LOGIN / CONTACTO
+================================ */
+
+.petly-simple-page {
+  min-height: 600px;
+
+  padding: 80px 0;
+
+  background-color: var(--crema);
+
+  display: flex;
+
+  align-items: center;
+}
+
+.simple-content {
+  max-width: 650px;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.login-container {
+  width: 100%;
+
+  max-width: 420px;
+
+  margin: 0 auto;
+
+  padding: 40px;
+
+  background-color: #ffffff;
+
+  border: 1px solid var(--borde);
+
+  border-radius: 10px;
+
+  text-align: center;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.04);
+}
+
+.login-container .section-label {
+  margin-bottom: 8px;
+}
+
+.login-container .petly-title {
+  margin-bottom: 10px;
+}
+
+
+/* ================================
+   PRODUCTO NO ENCONTRADO
+================================ */
+
+.producto-no-encontrado {
+  min-height: 550px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+
+/* ================================
+   FOOTER
+================================ */
+
+.petly-footer {
+  background-color: var(--marron);
+
+  color: #ffffff;
+
+  padding: 30px 0;
+}
+
+.petly-footer p {
+  font-size: 0.8rem;
+
+  margin-bottom: 5px;
+}
+
+.petly-footer small {
+  color: var(--crema);
+
+  font-size: 0.72rem;
+}
+
+
+/* ================================
+   TABLET
+================================ */
+
+@media (max-width: 991px) {
+
+  .petly-navbar .nav-link {
+    padding: 8px 10px;
+  }
+
+  .petly-category-content {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 10px;
+
+    padding: 10px 0;
+  }
+
+  .petly-search {
+    width: 100%;
+
+    max-width: none;
+  }
+
+  .hero-content {
+    padding-left: 6%;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .categorias-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .producto-grid {
+    grid-template-columns: 1fr;
+
+    gap: 30px;
+  }
+
+  .producto-imagen img {
+    height: 350px;
+  }
+
+  .carrito-item {
+    align-items: flex-start;
+  }
+
+}
+
+
+/* ================================
+   CELULAR
+================================ */
+
+@media (max-width: 576px) {
+
+  .petly-navbar {
+    padding: 10px 0;
+  }
+
+  .petly-logo {
+    font-size: 1.2rem;
+  }
+
+  .petly-category-content {
+    padding: 8px 0;
+  }
+
+  .petly-search {
+    width: 100%;
+  }
+
+  .petly-search .form-control {
+    min-width: 0;
+  }
+
+
+  /* HERO */
+
+  .petly-carousel .carousel-item {
+    height: 480px;
+  }
+
+  .hero-slide {
+    height: 480px;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+  }
+
+  .hero-content {
+    width: 100%;
+
+    padding: 45px 25px 10px;
+
+    text-align: center;
+  }
+
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-content p {
+    font-size: 0.78rem;
+  }
+
+  .hero-image {
+    width: 100%;
+
+    height: 260px;
+  }
+
+
+  /* CATEGORIAS */
+
+  .categorias-grid {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+  }
+
+  .categoria-card {
+    min-height: 100px;
+  }
+
+
+  /* CARDS */
+
+  .img-container {
+    height: 210px;
+  }
+
+
+  /* PRODUCTO */
+
+  .producto-page {
+    padding: 30px 0;
+  }
+
+  .producto-imagen {
+    padding: 15px;
+  }
+
+  .producto-imagen img {
+    height: 280px;
+  }
+
+  .producto-info h1 {
+    font-size: 1.5rem;
+  }
+
+  .precio {
+    font-size: 1.5rem;
+  }
+
+  .botones {
+    flex-direction: column;
+  }
+
+  .botones .btn {
+    width: 100%;
+  }
+
+
+  /* CARRITO */
+
+  .carrito-item {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    padding: 15px;
+  }
+
+  .carrito-producto {
+    align-items: flex-start;
+  }
+
+  .carrito-producto img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .carrito-controles {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  .carrito-resumen {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 15px;
+  }
+
+  .carrito-resumen .btn {
+    width: 100%;
+  }
+
+
+  /* LOGIN */
+
+  .login-container {
+    padding: 30px 20px;
+  }
+
+}
