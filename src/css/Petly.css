@@ -1215,3 +1215,77 @@ input {
   }
 
 }
+/* ================================
+  DASHBOARD ADMIN
+================================ */
+
+.admin-card-stat {
+  background-color: #ffffff;
+  border: 1px solid var(--borde) !important;
+  border-radius: 10px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-card-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.admin-card-stat .stat-title {
+  color: #666666;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-card-stat .stat-number {
+  color: var(--titulo);
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.admin-dropdown-menu {
+  border: 1px solid var(--borde) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 6px !important;
+}
+
+.admin-dropdown-item {
+  color: var(--texto) !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 8px 14px !important;
+}
+
+.admin-dropdown-item:hover {
+  background-color: var(--crema) !important;
+  color: var(--marron) !important;
+}
+
+.admin-table thead {
+  background-color: var(--marron);
+  color: #ffffff;
+}
+
+.admin-table thead th {
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 12px;
+}
+
+.admin-table tbody td {
+  border-color: var(--borde);
+  font-size: 0.85rem;
+  padding: 12px;
+}
+
+.admin-table-card {
+  background-color: #ffffff;
+  border: 1px solid var(--borde) !important;
+  border-radius: 10px !important;
+}
