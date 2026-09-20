@@ -1,52 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
+import { ProductoContext } from "../context/ProductoContext";
 
 export default function EditarEliminarCategoria() {
-  const [categorias, setCategorias] = useState([]);
   const [categoriaEditada, setCategoriaEditada] = useState(null);
   const [categoriaEliminar, setCategoriaEliminar] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const navigate = useNavigate();
-  const API_URL = "http://34.193.229.170:8080/api/v1/categorias";
-
-  // Cargar categorías desde la API
   
-  const cargarCategorias = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(API_URL);
-      setCategorias(res.data);
-    } catch (err) {
-      console.error("Error al cargar categorías:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const navigate = useNavigate();
+  const { categorias, loading, cargarCategorias, eliminarCategoria } = useContext(ProductoContext);
 
   useEffect(() => {
     cargarCategorias();
   }, []);
 
-  // Abrir modal de edición
   const abrirEditar = (categoria) => {
     setCategoriaEditada({ ...categoria });
   };
 
-  // Guardar cambios al editar
   const guardarCambios = async (e) => {
     e.preventDefault();
 
-    if (!categoriaEditada.nombre || categoriaEditada.nombre.trim() === "") {
+    const nombre = categoriaEditada.nombreCategoria || categoriaEditada.nombre;
+    if (!nombre || nombre.trim() === "") {
       alert("Debes ingresar un nombre para la categoría.");
       return;
     }
 
+    const id = categoriaEditada.idCategoria || categoriaEditada.id;
+
     try {
-      await axios.put(`${API_URL}/${categoriaEditada.id}`, {
-        nombre: categoriaEditada.nombre.trim(),
+      await fetch(`http://localhost:8083/api/bff/categorias/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombreCategoria: nombre.trim() }),
       });
       alert("¡Categoría actualizada exitosamente!");
       cargarCategorias();
@@ -57,17 +44,15 @@ export default function EditarEliminarCategoria() {
     }
   };
 
-  // Abrir modal de eliminación
   const abrirEliminar = (categoria) => {
     setCategoriaEliminar({ ...categoria });
   };
 
-  // Confirmar eliminación
   const confirmarEliminar = async () => {
+    const id = categoriaEliminar.idCategoria || categoriaEliminar.id;
     try {
-      await axios.delete(`${API_URL}/${categoriaEliminar.id}`);
-      alert("Categoría eliminada exitosamente.");
-      cargarCategorias();
+      await eliminarCategoria(id);
+      alert("Categoría eliminada exitosamente. Los productos asociados permanecen disponibles en 'Todas'.");
       setCategoriaEliminar(null);
     } catch (err) {
       console.error("Error al eliminar categoría:", err);
@@ -78,11 +63,10 @@ export default function EditarEliminarCategoria() {
   return (
     <div className="petly-simple-page py-5 min-vh-100">
       <div className="container">
-        {/* Encabezado */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
           <div>
             <span className="section-label">CATÁLOGO</span>
-            <h1 className="petly-title mb-1">Gestión de Categorías 🏷️</h1>
+            <h1 className="petly-title mb-1 fs-3">Gestión de Categorías 🏷️</h1>
             <p className="petly-subtitle mb-0">Edita o elimina categorías del catálogo</p>
           </div>
           <button className="petly-btn-outline" onClick={() => navigate("/DashboardAdmin")}>
@@ -90,7 +74,6 @@ export default function EditarEliminarCategoria() {
           </button>
         </div>
 
-        {/* Tabla de Categorías */}
         <div className="card admin-table-card shadow-sm border-0">
           <div className="card-body p-4">
             <div className="table-responsive">
@@ -104,28 +87,32 @@ export default function EditarEliminarCategoria() {
                 </thead>
                 <tbody>
                   {categorias && categorias.length > 0 ? (
-                    categorias.map((c) => (
-                      <tr key={c.id}>
-                        <td className="text-muted fw-semibold">#{c.id}</td>
-                        <td className="fw-semibold text-start">{c.nombre}</td>
-                        <td>
-                          <div className="d-flex justify-content-center gap-2">
-                            <button
-                              className="btn btn-sm btn-outline-warning"
-                              onClick={() => abrirEditar(c)}
-                            >
-                              ✏️ Editar
-                            </button>
-                            <button
-                              className="btn btn-sm btn-outline-danger"
-                              onClick={() => abrirEliminar(c)}
-                            >
-                              🗑️ Eliminar
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
+                    categorias.map((c) => {
+                      const id = c.idCategoria || c.id;
+                      const nombre = c.nombreCategoria || c.nombre;
+                      return (
+                        <tr key={id}>
+                          <td className="text-muted fw-semibold">#{id}</td>
+                          <td className="fw-semibold text-start">{nombre}</td>
+                          <td>
+                            <div className="d-flex justify-content-center gap-2">
+                              <button
+                                className="btn btn-sm btn-outline-warning"
+                                onClick={() => abrirEditar(c)}
+                              >
+                                ✏️ Editar
+                              </button>
+                              <button
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={() => abrirEliminar(c)}
+                              >
+                                🗑️ Eliminar
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
                       <td colSpan="3" className="text-center py-4">
@@ -145,23 +132,14 @@ export default function EditarEliminarCategoria() {
           </div>
         </div>
 
-        {/* Modal de Edición */}
         {categoriaEditada && (
-          <div
-            className="modal fade show d-block"
-            tabIndex="-1"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-          >
+          <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <form onSubmit={guardarCambios}>
                   <div className="modal-header petly-navbar text-white">
                     <h5 className="modal-title fw-bold">✏️ Editar Categoría</h5>
-                    <button
-                      type="button"
-                      className="btn-close btn-close-white"
-                      onClick={() => setCategoriaEditada(null)}
-                    ></button>
+                    <button type="button" className="btn-close btn-close-white" onClick={() => setCategoriaEditada(null)}></button>
                   </div>
                   <div className="modal-body p-4 text-start">
                     <div className="mb-3">
@@ -169,9 +147,9 @@ export default function EditarEliminarCategoria() {
                       <input
                         type="text"
                         className="form-control"
-                        value={categoriaEditada.nombre || ""}
+                        value={categoriaEditada.nombreCategoria || categoriaEditada.nombre || ""}
                         onChange={(e) =>
-                          setCategoriaEditada({ ...categoriaEditada, nombre: e.target.value })
+                          setCategoriaEditada({ ...categoriaEditada, nombreCategoria: e.target.value, nombre: e.target.value })
                         }
                         required
                         autoFocus
@@ -179,11 +157,7 @@ export default function EditarEliminarCategoria() {
                     </div>
                   </div>
                   <div className="modal-footer bg-light">
-                    <button
-                      type="button"
-                      className="petly-btn-outline py-2 px-3"
-                      onClick={() => setCategoriaEditada(null)}
-                    >
+                    <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setCategoriaEditada(null)}>
                       Cancelar
                     </button>
                     <button type="submit" className="petly-btn py-2 px-3">
@@ -196,41 +170,26 @@ export default function EditarEliminarCategoria() {
           </div>
         )}
 
-        {/* Modal de Eliminación */}
         {categoriaEliminar && (
-          <div
-            className="modal fade show d-block"
-            tabIndex="-1"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-          >
+          <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <div className="modal-header bg-danger text-white">
                   <h5 className="modal-title fw-bold">🗑️ Confirmar Eliminación</h5>
-                  <button
-                    type="button"
-                    className="btn-close btn-close-white"
-                    onClick={() => setCategoriaEliminar(null)}
-                  ></button>
+                  <button type="button" className="btn-close btn-close-white" onClick={() => setCategoriaEliminar(null)}></button>
                 </div>
                 <div className="modal-body p-4 text-center">
                   <p className="mb-1">¿Estás seguro de que deseas eliminar esta categoría?</p>
-                  <strong className="d-block fs-5 text-dark mt-2">{categoriaEliminar.nombre}</strong>
-                  <small className="text-muted">Los productos asociados a esta categoría podrían quedar sin clasificación.</small>
+                  <strong className="d-block fs-5 text-dark mt-2">
+                    {categoriaEliminar.nombreCategoria || categoriaEliminar.nombre}
+                  </strong>
+                  <small className="text-muted">Los productos mantendrán su información y estarán disponibles bajo la categoría "Todas".</small>
                 </div>
                 <div className="modal-footer bg-light justify-content-center">
-                  <button
-                    type="button"
-                    className="petly-btn-outline py-2 px-3"
-                    onClick={() => setCategoriaEliminar(null)}
-                  >
+                  <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setCategoriaEliminar(null)}>
                     Cancelar
                   </button>
-                  <button
-                    type="button"
-                    className="btn btn-danger py-2 px-3 fw-bold rounded-3"
-                    onClick={confirmarEliminar}
-                  >
+                  <button type="button" className="btn btn-danger py-2 px-3 fw-bold rounded-3" onClick={confirmarEliminar}>
                     Sí, eliminar
                   </button>
                 </div>

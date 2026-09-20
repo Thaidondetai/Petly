@@ -6,15 +6,14 @@ function Contact() {
     <>
       <NavComponent />
       
-      <main className="petly-simple-page">
+      <main className="petly-simple-page py-5">
         <div className="container">
           <div className="simple-content">
-
             <span className="section-label">
               PETLY
             </span>
 
-            <h1 className="petly-title">
+            <h1 className="petly-title fs-2 mb-2">
               Contacto
             </h1>
 
@@ -24,6 +23,7 @@ function Contact() {
           </div>
         </div>
       </main>
+
       <FooterComponent />
     </>
   );

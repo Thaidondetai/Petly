@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
+import { ProductoContext } from "../context/ProductoContext";
 
 export default function AgregarMarca() {
   const [nombreMarca, setNombreMarca] = useState("");
-  const[descripcionMarca, setDescripcionMarca] = useState("");
+  const [descripcionMarca, setDescripcionMarca] = useState("");
   const [cargando, setCargando] = useState(false);
-  
 
   const navigate = useNavigate();
+  const { agregarMarca } = useContext(ProductoContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,13 +22,12 @@ export default function AgregarMarca() {
     setCargando(true);
 
     const nuevaMarca = {
-      nombre: nombreMarca.trim(),
+      nombreMarca: nombreMarca.trim(),
       descripcion: descripcionMarca.trim()
     };
 
     try {
-      // Ajusta la URL según el endpoint real de tu API de catálogo/categorías
-      await axios.post("http://34.193.229.170:8080/api/v1/marcas", nuevaMarca);
+      await agregarMarca(nuevaMarca);
       alert("¡Marca agregada correctamente!");
       
       setNombreMarca("");
@@ -47,8 +46,8 @@ export default function AgregarMarca() {
       <div className="container d-flex justify-content-center">
         <div className="login-container" style={{ maxWidth: "480px", width: "100%" }}>
           <span className="section-label">CATÁLOGO</span>
-          <h2 className="petly-title mb-1">Nueva Marca 🏷️</h2>
-          <p className="petly-subtitle mb-4">Ingresa el nombre de una marca nueva para identificar a que empresa pertenecen tus productos</p>
+          <h2 className="petly-title mb-1 fs-3">Nueva Marca 🏷️</h2>
+          <p className="petly-subtitle mb-4">Ingresa el nombre de una marca nueva para identificar la empresa de tus productos</p>
 
           <form onSubmit={handleSubmit} className="text-start">
             <div className="mb-4">
@@ -62,14 +61,14 @@ export default function AgregarMarca() {
                 required
                 autoFocus
               />
-              <label className="form-label small fw-semibold">Descripción de la marca</label>
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Ej. Marca de alimentos para mascotas..."
-                    value={descripcionMarca}
-                    onChange={(e) => setDescripcionMarca(e.target.value)}
-                />
+              <label className="form-label small fw-semibold mt-3">Descripción de la marca</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Ej. Marca de alimentos para mascotas..."
+                value={descripcionMarca}
+                onChange={(e) => setDescripcionMarca(e.target.value)}
+              />
             </div>
 
             <div className="d-flex gap-3">

@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
+import { ProductoContext } from "../context/ProductoContext";
 
 export default function AgregarCategoria() {
   const [nombreCategoria, setNombreCategoria] = useState("");
   const [cargando, setCargando] = useState(false);
 
   const navigate = useNavigate();
+  const { agregarCategoria } = useContext(ProductoContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,12 +21,11 @@ export default function AgregarCategoria() {
     setCargando(true);
 
     const nuevaCategoria = {
-      nombre: nombreCategoria.trim(),
+      nombreCategoria: nombreCategoria.trim(),
     };
 
     try {
-      // Ajusta la URL según el endpoint real de tu API de catálogo/categorías
-      await axios.post("http://34.193.229.170:8080/api/v1/categorias", nuevaCategoria);
+      await agregarCategoria(nuevaCategoria);
       alert("¡Categoría agregada correctamente!");
       
       setNombreCategoria("");
@@ -43,7 +43,7 @@ export default function AgregarCategoria() {
       <div className="container d-flex justify-content-center">
         <div className="login-container" style={{ maxWidth: "480px", width: "100%" }}>
           <span className="section-label">CATÁLOGO</span>
-          <h2 className="petly-title mb-1">Nueva Categoría 🏷️</h2>
+          <h2 className="petly-title mb-1 fs-3">Nueva Categoría 🏷️</h2>
           <p className="petly-subtitle mb-4">Ingresa el nombre para clasificar tus productos</p>
 
           <form onSubmit={handleSubmit} className="text-start">

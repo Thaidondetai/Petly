@@ -10,9 +10,8 @@ export default function EditarEliminarMarca() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-  const API_URL = "http://34.193.229.170:8080/api/v1/marcas";
+  const API_URL = "http://localhost:8083/api/bff/marcas";
 
-  // Cargar marcas desde la API
   const cargarMarcas = async () => {
     setLoading(true);
     try {
@@ -29,12 +28,10 @@ export default function EditarEliminarMarca() {
     cargarMarcas();
   }, []);
 
-  // Abrir modal de edición
   const abrirEditar = (marca) => {
     setMarcaEditada({ ...marca });
   };
 
-  // Guardar cambios al editar
   const guardarCambios = async (e) => {
     e.preventDefault();
 
@@ -60,12 +57,10 @@ export default function EditarEliminarMarca() {
     }
   };
 
-  // Abrir modal de eliminación
   const abrirEliminar = (marca) => {
     setMarcaEliminar({ ...marca });
   };
 
-  // Confirmar eliminación
   const confirmarEliminar = async () => {
     const idMarca = marcaEliminar.idMarca || marcaEliminar.id;
     try {
@@ -82,12 +77,11 @@ export default function EditarEliminarMarca() {
   return (
     <div className="petly-simple-page py-5 min-vh-100">
       <div className="container">
-        {/* Encabezado */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
           <div>
             <span className="section-label">PRODUCTOS</span>
-            <h1 className="petly-title mb-1">Gestión de Marcas 🏷️</h1>
-            <p className="petly-subtitle mb-0">Crea,edita o elimina marcas registradas</p>
+            <h1 className="petly-title mb-1 fs-3">Gestión de Marcas 🏷️</h1>
+            <p className="petly-subtitle mb-0">Crea, edita o elimina marcas registradas</p>
           </div>
           <div className="d-flex flex-wrap gap-2">
             <button className="petly-btn py-2 px-3 fw-semibold" onClick={() => navigate("/AgregarMarca")}>
@@ -99,7 +93,6 @@ export default function EditarEliminarMarca() {
           </div>
         </div>
 
-        {/* Tabla de Marcas */}
         <div className="card admin-table-card shadow-sm border-0">
           <div className="card-body p-4">
             <div className="table-responsive">
@@ -160,23 +153,14 @@ export default function EditarEliminarMarca() {
           </div>
         </div>
 
-        {/* Modal de Edición */}
         {marcaEditada && (
-          <div
-            className="modal fade show d-block"
-            tabIndex="-1"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-          >
+          <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <form onSubmit={guardarCambios}>
                   <div className="modal-header petly-navbar text-white">
                     <h5 className="modal-title fw-bold">✏️ Editar Marca</h5>
-                    <button
-                      type="button"
-                      className="btn-close btn-close-white"
-                      onClick={() => setMarcaEditada(null)}
-                    ></button>
+                    <button type="button" className="btn-close btn-close-white" onClick={() => setMarcaEditada(null)}></button>
                   </div>
                   <div className="modal-body p-4 text-start">
                     <div className="mb-3">
@@ -209,11 +193,7 @@ export default function EditarEliminarMarca() {
                     </div>
                   </div>
                   <div className="modal-footer bg-light">
-                    <button
-                      type="button"
-                      className="petly-btn-outline py-2 px-3"
-                      onClick={() => setMarcaEditada(null)}
-                    >
+                    <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setMarcaEditada(null)}>
                       Cancelar
                     </button>
                     <button type="submit" className="petly-btn py-2 px-3">
@@ -226,22 +206,13 @@ export default function EditarEliminarMarca() {
           </div>
         )}
 
-        {/* Modal de Eliminación */}
         {marcaEliminar && (
-          <div
-            className="modal fade show d-block"
-            tabIndex="-1"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-          >
+          <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <div className="modal-header bg-danger text-white">
                   <h5 className="modal-title fw-bold">🗑️ Confirmar Eliminación</h5>
-                  <button
-                    type="button"
-                    className="btn-close btn-close-white"
-                    onClick={() => setMarcaEliminar(null)}
-                  ></button>
+                  <button type="button" className="btn-close btn-close-white" onClick={() => setMarcaEliminar(null)}></button>
                 </div>
                 <div className="modal-body p-4 text-center">
                   <p className="mb-1">¿Estás seguro de que deseas eliminar esta marca?</p>
@@ -253,18 +224,10 @@ export default function EditarEliminarMarca() {
                   </small>
                 </div>
                 <div className="modal-footer bg-light justify-content-center">
-                  <button
-                    type="button"
-                    className="petly-btn-outline py-2 px-3"
-                    onClick={() => setMarcaEliminar(null)}
-                  >
+                  <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setMarcaEliminar(null)}>
                     Cancelar
                   </button>
-                  <button
-                    type="button"
-                    className="btn btn-danger py-2 px-3 fw-bold rounded-3"
-                    onClick={confirmarEliminar}
-                  >
+                  <button type="button" className="btn btn-danger py-2 px-3 fw-bold rounded-3" onClick={confirmarEliminar}>
                     Sí, eliminar
                   </button>
                 </div>
