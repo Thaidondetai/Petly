@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("access_token");
+  return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+};
+
 export default function EditarEliminarMarca() {
   const [marcas, setMarcas] = useState([]);
   const [marcaEditada, setMarcaEditada] = useState(null);
@@ -10,7 +15,8 @@ export default function EditarEliminarMarca() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-  const API_URL = "http://localhost:8083/api/bff/marcas";
+  const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
+  const API_URL = `${BFF_URL}/api/bff/marcas`;
 
   const cargarMarcas = async () => {
     setLoading(true);
@@ -44,10 +50,14 @@ export default function EditarEliminarMarca() {
     const idMarca = marcaEditada.idMarca || marcaEditada.id;
 
     try {
-      await axios.put(`${API_URL}/${idMarca}`, {
-        nombreMarca: nombre.trim(),
-        descripcion: marcaEditada.descripcion?.trim() || "",
-      });
+      await axios.put(
+        `${API_URL}/${idMarca}`,
+        {
+          nombreMarca: nombre.trim(),
+          descripcion: marcaEditada.descripcion?.trim() || "",
+        },
+        getAuthHeaders()
+      );
       alert("¡Marca actualizada exitosamente!");
       cargarMarcas();
       setMarcaEditada(null);
@@ -64,7 +74,7 @@ export default function EditarEliminarMarca() {
   const confirmarEliminar = async () => {
     const idMarca = marcaEliminar.idMarca || marcaEliminar.id;
     try {
-      await axios.delete(`${API_URL}/${idMarca}`);
+      await axios.delete(`${API_URL}/${idMarca}`, getAuthHeaders());
       alert("Marca eliminada exitosamente.");
       cargarMarcas();
       setMarcaEliminar(null);

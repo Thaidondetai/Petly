@@ -1,10 +1,11 @@
-import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
+import { NavLink, useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Form } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 function NavComponent() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const busqueda = searchParams.get("buscar") || "";
 
   const [usuario, setUsuario] = useState({
@@ -12,7 +13,7 @@ function NavComponent() {
     esAdmin: false,
   });
 
-  useEffect(() => {
+  const verificarSesion = useCallback(() => {
     const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
 
     if (token) {
@@ -23,13 +24,22 @@ function NavComponent() {
           estaLogueado: true,
           esAdmin: groups.includes("admin"),
         });
-      } catch (error) {
+      } catch {
         setUsuario({ estaLogueado: false, esAdmin: false });
       }
     } else {
       setUsuario({ estaLogueado: false, esAdmin: false });
     }
   }, []);
+
+  useEffect(() => {
+    verificarSesion();
+
+    window.addEventListener("storage", verificarSesion);
+    return () => {
+      window.removeEventListener("storage", verificarSesion);
+    };
+  }, [location.pathname, verificarSesion]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -96,7 +106,7 @@ function NavComponent() {
             </button>
           </Form>
 
-          <Nav className="ms-auto align-items-lg-center">
+          <Nav className="ms-auto align-items-lg-center gap-2">
             {usuario.esAdmin && (
               <Nav.Link as={NavLink} to="/DashboardAdmin" className="fw-bold text-warning">
                 ⚙️ Panel Admin
@@ -104,7 +114,7 @@ function NavComponent() {
             )}
 
             <Nav.Link as={NavLink} to="/Carro" className="petly-nav-icon">
-              Carro
+              Carro 🛒
             </Nav.Link>
 
             <Nav.Link as={NavLink} to="/Contacto">
@@ -114,7 +124,7 @@ function NavComponent() {
             {usuario.estaLogueado ? (
               <>
                 <Nav.Link as={NavLink} to="/Perfil" className="petly-nav-icon">
-                  Mi Perfil
+                  Mi Perfil 👤
                 </Nav.Link>
                 <button
                   type="button"
@@ -125,8 +135,8 @@ function NavComponent() {
                 </button>
               </>
             ) : (
-              <Nav.Link as={NavLink} to="/Login" className="petly-nav-icon">
-                Inicio sesión
+              <Nav.Link as={NavLink} to="/Login" className="petly-nav-icon fw-semibold">
+                Iniciar sesión
               </Nav.Link>
             )}
           </Nav>

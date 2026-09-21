@@ -6,7 +6,7 @@ import { ProductoContext } from "../context/ProductoContext";
 export default function EditarEliminarCategoria() {
   const [categoriaEditada, setCategoriaEditada] = useState(null);
   const [categoriaEliminar, setCategoriaEliminar] = useState(null);
-  
+
   const navigate = useNavigate();
   const { categorias, loading, cargarCategorias, eliminarCategoria } = useContext(ProductoContext);
 
@@ -28,13 +28,23 @@ export default function EditarEliminarCategoria() {
     }
 
     const id = categoriaEditada.idCategoria || categoriaEditada.id;
+    const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
+    const token = localStorage.getItem("access_token");
 
     try {
-      await fetch(`http://localhost:8083/api/bff/categorias/${id}`, {
+      const response = await fetch(`${BFF_URL}/api/bff/categorias/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
         body: JSON.stringify({ nombreCategoria: nombre.trim() }),
       });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}`);
+      }
+
       alert("¡Categoría actualizada exitosamente!");
       cargarCategorias();
       setCategoriaEditada(null);

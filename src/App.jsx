@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -16,7 +16,6 @@ import AgregarMarca from "./pages/AgregarMarca";
 
 import { ProductoProvider } from "./context/ProductoContext";
 
-// Protege ls rutas administrativas verificando el grupo admin en el token JWT
 function RutaAdminProtegida({ children }) {
   const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
 
@@ -25,11 +24,9 @@ function RutaAdminProtegida({ children }) {
   }
 
   try {
-    // Decodifica el payload del token JWT (sección central separada por puntos)
     const payload = JSON.parse(atob(token.split(".")[1]));
     const groups = payload["cognito:groups"] || [];
 
-    // Si el usuario no pertenece al grupo 'admin', redirige al inicio
     if (!groups.includes("admin")) {
       alert("Acceso denegado: Se requieren permisos de administrador.");
       return <Navigate to="/" replace />;
@@ -43,13 +40,15 @@ function RutaAdminProtegida({ children }) {
 }
 
 function App() {
+  const codeProcesado = useRef(false);
+
   useEffect(() => {
-    // Intercambia el parmetro ?code= de Cognito por los tokens de acceso
     const exchangeCodeForTokens = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
 
-      if (!code) return;
+      if (!code || codeProcesado.current) return;
+      codeProcesado.current = true;
 
       const domain = import.meta.env.VITE_COGNITO_DOMAIN;
       const clientId = import.meta.env.VITE_COGNITO_CLIENT_ID;
@@ -77,8 +76,9 @@ function App() {
           localStorage.setItem("id_token", data.id_token);
           localStorage.setItem("access_token", data.access_token);
 
-          // Limpia la URL removiendo el parámetro ?code=...
           window.history.replaceState({}, document.title, window.location.pathname);
+
+          window.dispatchEvent(new Event("storage"));
         }
       } catch (error) {
         console.error("Error al intercambiar token con Cognito:", error);
