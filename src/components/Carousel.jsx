@@ -8,11 +8,10 @@ function CarouselComponent() {
           <div className="hero-content">
             <h1>Todo lo que tu<br />mascota necesita</h1>
             <p>Alimentos, juguetes, camas y más.<br />Para perros y gatos.</p>
-            <button className="petly-btn">VER PRODUCTOS</button>
           </div>
           <div className="hero-image">
             <img
-              src="https://i.pinimg.com/1200x/a8/06/1d/a8061dab5091d2b1970052bfb3956259.jpg"
+              src="https://www.vitakraft.com/fileadmin/_processed_/4/3/csm_por_qu%C3%A9_duerme_tanto_mi_gato_876d94bdc3.jpg"
               alt="Productos para mascotas"
             />
           </div>
@@ -24,11 +23,10 @@ function CarouselComponent() {
           <div className="hero-content">
             <h1>Para perros<br />y gatos</h1>
             <p>Encuentra lo que necesitas<br />para tus mascotas.</p>
-            <button className="petly-btn">VER PRODUCTOS</button>
           </div>
           <div className="hero-image">
             <img
-              src="https://i.pinimg.com/1200x/a8/06/1d/a8061dab5091d2b1970052bfb3956259.jpg"
+              src="https://cpdelivery.cl/wp-content/uploads/2025/05/mascotas-jugando-gatos-y-perros-mostrando-amistad-1536x861.jpg"
               alt="Productos para perros y gatos"
             />
           </div>
@@ -40,11 +38,10 @@ function CarouselComponent() {
           <div className="hero-content">
             <h1>Cuida a quienes<br />más quieres</h1>
             <p>Calidad y variedad<br />en un solo lugar.</p>
-            <button className="petly-btn">VER PRODUCTOS</button>
           </div>
           <div className="hero-image">
             <img
-              src="https://i.pinimg.com/1200x/a8/06/1d/a8061dab5091d2b1970052bfb3956259.jpg"
+              src="https://clinicalaveterinaria.it/wp-content/uploads/2017/05/microchip-cane-gatto-coniglio.jpg"
               alt="Productos para mascotas"
             />
           </div>
