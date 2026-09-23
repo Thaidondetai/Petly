@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 };
 
@@ -15,13 +15,13 @@ export default function EditarEliminarMarca() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-  const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
+  const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
   const API_URL = `${BFF_URL}/api/bff/marcas`;
 
   const cargarMarcas = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(API_URL);
+      const res = await axios.get(API_URL, getAuthHeaders());
       setMarcas(res.data);
     } catch (err) {
       console.error("Error al cargar marcas:", err);

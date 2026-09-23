@@ -1,12 +1,14 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const ProductoContext = createContext();
 
-const BFF_URL = import.meta.env.VITE_BFF_URL || 'http://localhost:8083';
+const BFF_URL = import.meta.env.VITE_BFF_URL || 'https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com';
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 };
 
@@ -17,11 +19,9 @@ export function ProductoProvider({ children }) {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const [loading, setLoading] = useState(true);
 
-
   const cargarCategorias = useCallback(async () => {
     try {
-      // Ajusta aquí si tu backend usa /api/bff/categorias o /api/categoria
-      const res = await axios.get(`${BFF_URL}/api/bff/categorias`);
+      const res = await axios.get(`${BFF_URL}/api/bff/categorias`, getAuthHeaders());
       setCategorias(res.data);
     } catch (error) {
       console.error("Error al cargar categorías desde el BFF:", error);
@@ -30,7 +30,7 @@ export function ProductoProvider({ children }) {
 
   const cargarMarcas = useCallback(async () => {
     try {
-      const res = await axios.get(`${BFF_URL}/api/bff/marcas`);
+      const res = await axios.get(`${BFF_URL}/api/bff/marcas`, getAuthHeaders());
       setMarcas(res.data);
     } catch (error) {
       console.error("Error al cargar marcas desde el BFF:", error);
@@ -42,7 +42,7 @@ export function ProductoProvider({ children }) {
       const url = categoriaId 
         ? `${BFF_URL}/api/bff/productos?categoriaId=${categoriaId}` 
         : `${BFF_URL}/api/bff/productos`;
-      const response = await axios.get(url);
+      const response = await axios.get(url, getAuthHeaders());
       setProductos(response.data);
     } catch (err) {
       console.error("Error al obtener productos desde el BFF:", err);
@@ -63,7 +63,6 @@ export function ProductoProvider({ children }) {
     inicializar();
     return () => { activo = false; };
   }, [cargarCategorias, cargarMarcas, cargarProductos]);
-
 
   const crearProducto = async (nuevoProducto) => {
     try {

@@ -12,7 +12,7 @@ function ProductPage() {
   const [productoDetalle, setProductoDetalle] = useState(productoState || null);
   const [loading, setLoading] = useState(true);
 
-  const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
+  const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
 
   useEffect(() => {
     const id = productoState?.idProducto || productoState?.id_prod || productoState?.id;

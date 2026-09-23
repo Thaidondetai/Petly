@@ -8,7 +8,7 @@ import { ProductoContext } from "../context/ProductoContext";
 import { DEFAULT_IMAGE, handleImageError } from "../utils/constants";
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 };
 
@@ -48,7 +48,7 @@ function Carro() {
     for (const item of carrito) {
       const idProd = item.idProducto || item.id;
       try {
-        const res = await axios.get(`${BFF_URL}/api/bff/productos/${idProd}/detalle`);
+        const res = await axios.get(`${BFF_URL}/api/bff/productos/${idProd}/detalle`, getAuthHeaders());
         if (res.data && (res.data.idProducto || res.data.id)) {
           carritoValido.push(item);
         } else {
@@ -75,7 +75,11 @@ function Carro() {
   };
 
   useEffect(() => {
-    actualizarCarrito();
+    const cargar = async () => {
+      await actualizarCarrito();
+    };
+    cargar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cambiarCantidad = (idProducto, nuevaCantidad) => {
@@ -120,7 +124,7 @@ function Carro() {
       return;
     }
 
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
     if (!token) {
       alert("Debes iniciar sesión para realizar una compra.");
       navigate("/Login");
@@ -128,12 +132,12 @@ function Carro() {
     }
 
     setProcesando(true);
-    const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
+    const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
 
     try {
       for (const item of carritoDetallado) {
         const idProd = item.idProducto || item.id;
-        const res = await axios.get(`${BFF_URL}/api/bff/productos/${idProd}/detalle`);
+        const res = await axios.get(`${BFF_URL}/api/bff/productos/${idProd}/detalle`, getAuthHeaders());
         const productoBackend = res.data;
 
         if (productoBackend.stock < item.cantidad) {
@@ -216,7 +220,7 @@ function Carro() {
                         />
                         <div>
                           <h5 className="mb-1 fw-bold fs-6">{item.nombreProducto || item.nom_prod}</h5>
-                          <p className="text-muted small mb-1">${item.precio?.toLocaleString("es-CL")} c/u</p>
+                          <p className="text-muted small mb-1">${item.precio?.toLocaleString("es-CL")}</p>
                           <strong className="text-danger small">Subtotal: ${item.subtotal?.toLocaleString("es-CL")}</strong>
                         </div>
                       </div>

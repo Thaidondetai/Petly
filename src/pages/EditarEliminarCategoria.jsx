@@ -12,7 +12,7 @@ export default function EditarEliminarCategoria() {
 
   useEffect(() => {
     cargarCategorias();
-  }, []);
+  }, [cargarCategorias]);
 
   const abrirEditar = (categoria) => {
     setCategoriaEditada({ ...categoria });
@@ -28,8 +28,9 @@ export default function EditarEliminarCategoria() {
     }
 
     const id = categoriaEditada.idCategoria || categoriaEditada.id;
-    const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
-    const token = localStorage.getItem("access_token");
+    const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
+    
+    const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
 
     try {
       const response = await fetch(`${BFF_URL}/api/bff/categorias/${id}`, {
