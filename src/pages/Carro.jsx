@@ -6,6 +6,7 @@ import NavComponent from "../components/NavComp";
 import FooterComponent from "../components/FooterComp";
 import { ProductoContext } from "../context/ProductoContext";
 import { DEFAULT_IMAGE, handleImageError } from "../utils/constants";
+import { useTranslation } from "react-i18next";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
@@ -13,6 +14,7 @@ const getAuthHeaders = () => {
 };
 
 function Carro() {
+  const { t } = useTranslation();
   const [carritoDetallado, setCarritoDetallado] = useState([]);
   const [total, setTotal] = useState(0);
   const [procesando, setProcesando] = useState(false);
@@ -60,7 +62,7 @@ function Carro() {
     }
 
     if (huboEliminados) {
-      alert("Algunos productos de tu carrito fueron removidos porque ya no están disponibles en la tienda.");
+      alert(t("removed_unavailable_items"));
       guardarCarrito(carritoValido);
     }
 
@@ -79,7 +81,6 @@ function Carro() {
       await actualizarCarrito();
     };
     cargar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cambiarCantidad = (idProducto, nuevaCantidad) => {
@@ -89,7 +90,7 @@ function Carro() {
     const productoActual = carrito.find((p) => (p.idProducto || p.id) === idProducto);
 
     if (productoActual && nuevaCantidad > productoActual.stockDisponible) {
-      alert(`No puedes agregar más unidades. El stock disponible es de ${productoActual.stockDisponible}.`);
+      alert(`${t("max_stock_reached")} ${productoActual.stockDisponible}.`);
       return;
     }
 
@@ -120,13 +121,13 @@ function Carro() {
 
   const comprar = async () => {
     if (carritoDetallado.length === 0) {
-      alert("Tu carrito está vacío.");
+      alert(t("empty_cart_alert"));
       return;
     }
 
     const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
     if (!token) {
-      alert("Debes iniciar sesión para realizar una compra.");
+      alert(t("login_required_buy"));
       navigate("/Login");
       return;
     }
@@ -165,7 +166,7 @@ function Carro() {
         );
       }
 
-      alert("🎉 ¡Compra realizada con éxito! El stock ha sido actualizado en la tienda.");
+      alert(t("buy_success_msg"));
       localStorage.removeItem("carro");
       setCarritoDetallado([]);
       setTotal(0);
@@ -190,16 +191,16 @@ function Carro() {
         <Container>
           <div className="mb-4">
             <span className="section-label">PETLY</span>
-            <h1 className="petly-title mb-1">Tu carrito</h1>
-            <p className="petly-subtitle">Revisa tus productos antes de comprar.</p>
+            <h1 className="petly-title mb-1">{t("your_cart_title")}</h1>
+            <p className="petly-subtitle">{t("your_cart_subtitle")}</p>
           </div>
 
           {carritoDetallado.length === 0 ? (
             <div className="card text-center p-5 border-0 shadow-sm" style={{ borderRadius: "12px" }}>
-              <p className="petly-subtitle mb-3">No tienes productos en el carrito.</p>
+              <p className="petly-subtitle mb-3">{t("empty_cart_msg")}</p>
               <div>
                 <Button className="petly-btn" onClick={() => navigate("/")}>
-                  Ver productos
+                  {t("view_products_btn")}
                 </Button>
               </div>
             </div>
@@ -221,7 +222,7 @@ function Carro() {
                         <div>
                           <h5 className="mb-1 fw-bold fs-6">{item.nombreProducto || item.nom_prod}</h5>
                           <p className="text-muted small mb-1">${item.precio?.toLocaleString("es-CL")}</p>
-                          <strong className="text-danger small">Subtotal: ${item.subtotal?.toLocaleString("es-CL")}</strong>
+                          <strong className="text-danger small">{t("subtotal_label")}: ${item.subtotal?.toLocaleString("es-CL")}</strong>
                         </div>
                       </div>
 
@@ -233,7 +234,7 @@ function Carro() {
                         </div>
 
                         <Button variant="outline-danger" size="sm" onClick={() => eliminarProducto(id)}>
-                          Eliminar
+                          {t("delete")}
                         </Button>
                       </div>
                     </div>
@@ -242,15 +243,15 @@ function Carro() {
               })}
 
               <div className="card p-4 mt-4 border-0 shadow-sm d-flex flex-row justify-content-between align-items-center" style={{ borderRadius: "12px" }}>
-                <h3 className="petly-title fs-4 mb-0">Total: ${total.toLocaleString("es-CL")}</h3>
+                <h3 className="petly-title fs-4 mb-0">{t("total_label")}: ${total.toLocaleString("es-CL")}</h3>
                 <Button className="petly-btn" onClick={comprar} disabled={procesando}>
-                  {procesando ? "Procesando..." : "Comprar"}
+                  {procesando ? t("processing_btn") : t("buy_btn")}
                 </Button>
               </div>
 
               <div className="mt-3">
                 <Button className="petly-btn-outline" onClick={() => navigate("/")}>
-                  Volver al inicio
+                  {t("back_home")}
                 </Button>
               </div>
             </>

@@ -1,7 +1,10 @@
 import FooterComponent from "../components/FooterComp";
 import NavComponent from "../components/NavComp";
+import { useTranslation } from "react-i18next";
 
 function Login() {
+  const { t } = useTranslation();
+
   const handleGoogleLogin = () => {
     const domain = import.meta.env.VITE_COGNITO_DOMAIN;
     const clientId = import.meta.env.VITE_COGNITO_CLIENT_ID;
@@ -26,11 +29,11 @@ function Login() {
             </span>
 
             <h1 className="petly-title fs-3 mb-2">
-              Iniciar sesión
+              {t("login_title")}
             </h1>
 
             <p className="petly-subtitle mb-4">
-              Accede a tu cuenta de Petly.
+              {t("login_subtitle")}
             </p>
 
             <button 
@@ -38,7 +41,7 @@ function Login() {
               className="btn petly-btn w-100 py-2"
               onClick={handleGoogleLogin}
             >
-              Continuar con Google
+              {t("continue_google")}
             </button>
           </div>
         </div>

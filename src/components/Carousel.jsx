@@ -1,13 +1,22 @@
 import Carousel from "react-bootstrap/Carousel";
+import { useTranslation } from "react-i18next";
 
 function CarouselComponent() {
+  const { t } = useTranslation();
+
   return (
     <Carousel className="petly-carousel">
       <Carousel.Item>
         <div className="hero-slide">
           <div className="hero-content">
-            <h1>Todo lo que tu<br />mascota necesita</h1>
-            <p>Alimentos, juguetes, camas y más.<br />Para perros y gatos.</p>
+            <h1>
+              {t("hero_slide1_title_line1")}<br />
+              {t("hero_slide1_title_line2")}
+            </h1>
+            <p>
+              {t("hero_slide1_desc_line1")}<br />
+              {t("hero_slide1_desc_line2")}
+            </p>
           </div>
           <div className="hero-image">
             <img
@@ -21,8 +30,14 @@ function CarouselComponent() {
       <Carousel.Item>
         <div className="hero-slide">
           <div className="hero-content">
-            <h1>Para perros<br />y gatos</h1>
-            <p>Encuentra lo que necesitas<br />para tus mascotas.</p>
+            <h1>
+              {t("hero_slide2_title_line1")}<br />
+              {t("hero_slide2_title_line2")}
+            </h1>
+            <p>
+              {t("hero_slide2_desc_line1")}<br />
+              {t("hero_slide2_desc_line2")}
+            </p>
           </div>
           <div className="hero-image">
             <img
@@ -36,8 +51,14 @@ function CarouselComponent() {
       <Carousel.Item>
         <div className="hero-slide">
           <div className="hero-content">
-            <h1>Cuida a quienes<br />más quieres</h1>
-            <p>Calidad y variedad<br />en un solo lugar.</p>
+            <h1>
+              {t("hero_slide3_title_line1")}<br />
+              {t("hero_slide3_title_line2")}
+            </h1>
+            <p>
+              {t("hero_slide3_desc_line1")}<br />
+              {t("hero_slide3_desc_line2")}
+            </p>
           </div>
           <div className="hero-image">
             <img

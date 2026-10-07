@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NavComponent from "../components/NavComp";
 import FooterComponent from "../components/FooterComp";
+import { useTranslation } from "react-i18next";
 
 function ProfilePage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [usuario, setUsuario] = useState({
@@ -58,9 +60,9 @@ function ProfilePage() {
         <div className="container" style={{ maxWidth: "850px" }}>
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
             <div>
-              <span className="section-label">MI CUENTA</span>
-              <h1 className="petly-title mb-1">Perfil de Usuario</h1>
-              <p className="petly-subtitle mb-0">Gestiona tus datos personales y preferencias</p>
+              <span className="section-label">{t("account_section")}</span>
+              <h1 className="petly-title mb-1">{t("profile_title")}</h1>
+              <p className="petly-subtitle mb-0">{t("profile_subtitle")}</p>
             </div>
 
             <div className="d-flex gap-2">
@@ -69,14 +71,14 @@ function ProfilePage() {
                   className="petly-btn py-2 px-3 fw-semibold"
                   onClick={() => navigate("/DashboardAdmin")}
                 >
-                  Panel Admin
+                  {t("admin_panel")}
                 </button>
               )}
               <button
                 className="btn btn-outline-danger py-2 px-3 fw-semibold rounded-3"
                 onClick={cerrarSesion}
               >
-                Cerrar Sesión
+                {t("logout")}
               </button>
             </div>
           </div>
@@ -105,38 +107,38 @@ function ProfilePage() {
                   } px-3 py-2 text-uppercase mb-3`}
                   style={{ letterSpacing: "0.5px" }}
                 >
-                  {usuario.rol === "ADMIN" ? "Administrador" : "Cliente"}
+                  {usuario.rol === "ADMIN" ? t("role_admin") : t("role_client")}
                 </span>
 
                 <hr className="my-3 text-muted" />
 
                 <small className="text-muted d-block text-start">
-                  <strong>Estado:</strong> Sesión activa
+                  <strong>Estado:</strong> {t("active_session")}
                 </small>
               </div>
             </div>
 
             <div className="col-12 col-md-8">
               <div className="card admin-table-card p-4 border-0 shadow-sm">
-                <h3 className="petly-title fs-5 mb-3">Información Personal</h3>
+                <h3 className="petly-title fs-5 mb-3">{t("personal_info")}</h3>
                 <div className="row g-3">
                   <div className="col-12 col-sm-6">
                     <div className="spec-card">
-                      <span className="spec-label">Nombre / Usuario</span>
+                      <span className="spec-label">{t("label_user_name")}</span>
                       <span className="spec-value">{usuario.nombre}</span>
                     </div>
                   </div>
 
                   <div className="col-12 col-sm-6">
                     <div className="spec-card">
-                      <span className="spec-label">Correo Electrónico</span>
+                      <span className="spec-label">{t("label_email")}</span>
                       <span className="spec-value">{usuario.email}</span>
                     </div>
                   </div>
 
                   <div className="col-12 col-sm-6">
                     <div className="spec-card">
-                      <span className="spec-label">Rol Asignado</span>
+                      <span className="spec-label">{t("label_role")}</span>
                       <span className="spec-value">{usuario.rol}</span>
                     </div>
                   </div>

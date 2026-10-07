@@ -4,8 +4,10 @@ import NavComponent from "../components/NavComp";
 import InfoProductComponent from "../components/InfoProduct";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 function ProductPage() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const { producto: productoState } = location.state || {};
@@ -22,7 +24,7 @@ function ProductPage() {
         .get(`${BFF_URL}/api/bff/productos/${id}/detalle`)
         .then((res) => {
           if (!res.data) {
-            alert("Este producto ya no se encuentra disponible.");
+            alert(t("product_not_found"));
             navigate("/");
             return;
           }
@@ -38,7 +40,7 @@ function ProductPage() {
           if (productoState) {
             setProductoDetalle(productoState);
           } else {
-            alert("El producto fue eliminado o no está disponible.");
+            alert(t("product_not_found"));
             navigate("/");
           }
           setLoading(false);
@@ -46,14 +48,14 @@ function ProductPage() {
     } else {
       setLoading(false);
     }
-  }, [productoState, navigate, BFF_URL]);
+  }, [productoState, navigate, BFF_URL, t]);
 
   if (loading) {
     return (
       <>
         <NavComponent />
         <main className="container py-5 text-center">
-          <p className="petly-subtitle">Cargando detalle del producto...</p>
+          <p className="petly-subtitle">{t("loading_product_detail")}</p>
         </main>
         <FooterComponent />
       </>
@@ -65,9 +67,9 @@ function ProductPage() {
       <>
         <NavComponent />
         <main className="container py-5 text-center">
-          <h1 className="petly-title fs-3">No se encontró el producto.</h1>
+          <h1 className="petly-title fs-3">{t("product_not_found")}</h1>
           <button className="petly-btn mt-3" onClick={() => navigate("/")}>
-            Volver al catálogo
+            {t("back_to_catalog")}
           </button>
         </main>
         <FooterComponent />

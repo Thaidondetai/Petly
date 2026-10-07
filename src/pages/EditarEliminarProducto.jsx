@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ProductoContext } from "../context/ProductoContext";
 import { DEFAULT_IMAGE, handleImageError } from "../utils/constants";
+import { useTranslation } from "react-i18next";
 
 export default function EditarEliminarProducto() {
+  const { t } = useTranslation();
   const [productoEditado, setProductoEditado] = useState(null);
   const [productoEliminar, setProductoEliminar] = useState(null);
   const navigate = useNavigate();
@@ -46,7 +48,7 @@ export default function EditarEliminarProducto() {
 
     try {
       await actualizarProducto(payload);
-      alert("¡Producto actualizado exitosamente!");
+      alert(t("product_updated_success"));
       setProductoEditado(null);
     } catch (err) {
       console.error("Error actualizando producto:", err);
@@ -62,7 +64,7 @@ export default function EditarEliminarProducto() {
     const id = productoEliminar.idProducto || productoEliminar.id_prod || productoEliminar.id;
     try {
       await eliminarProducto(id);
-      alert("Producto eliminado exitosamente.");
+      alert(t("product_deleted_success"));
       setProductoEliminar(null);
     } catch (err) {
       console.error("Error eliminando producto:", err);
@@ -75,12 +77,12 @@ export default function EditarEliminarProducto() {
       <div className="container">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
           <div>
-            <span className="section-label">ADMINISTRACIÓN</span>
-            <h1 className="petly-title mb-1 fs-3">Gestión de Productos 🐾</h1>
-            <p className="petly-subtitle mb-0">Edita o elimina productos del catálogo de Petly</p>
+            <span className="section-label">{t("admin_section")}</span>
+            <h1 className="petly-title mb-1 fs-3">{t("manage_products_title")}</h1>
+            <p className="petly-subtitle mb-0">{t("manage_products_subtitle")}</p>
           </div>
           <button className="petly-btn-outline" onClick={() => navigate("/DashboardAdmin")}>
-            ⬅ Volver al Dashboard
+            {t("back_dashboard")}
           </button>
         </div>
 
@@ -90,12 +92,12 @@ export default function EditarEliminarProducto() {
               <table className="table admin-table align-middle text-center mb-0">
                 <thead>
                   <tr>
-                    <th>Imagen</th>
-                    <th className="text-start">Nombre</th>
-                    <th>Especie</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Acciones</th>
+                    <th>{t("col_image")}</th>
+                    <th className="text-start">{t("product_name_label")}</th>
+                    <th>{t("species_label")}</th>
+                    <th>{t("col_price")}</th>
+                    <th>{t("col_stock")}</th>
+                    <th>{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -118,7 +120,7 @@ export default function EditarEliminarProducto() {
                           </td>
                           <td className="fw-semibold text-start">{nombre}</td>
                           <td>
-                            {idEspecie === 1 ? "🐶 Perro" : idEspecie === 2 ? "🐱 Gato" : "🦜 Exótico"}
+                            {idEspecie === 1 ? t("species_dog") : idEspecie === 2 ? t("species_cat") : t("species_exotic")}
                           </td>
                           <td className="text-success fw-bold">${Number(p.precio).toLocaleString("es-CL")}</td>
                           <td>{p.stock}</td>
@@ -128,13 +130,13 @@ export default function EditarEliminarProducto() {
                                 className="btn btn-sm btn-outline-warning"
                                 onClick={() => abrirEditar(p)}
                               >
-                                ✏️ Editar
+                                {t("edit")}
                               </button>
                               <button
                                 className="btn btn-sm btn-outline-danger"
                                 onClick={() => abrirEliminar(p)}
                               >
-                                🗑️ Eliminar
+                                {t("delete")}
                               </button>
                             </div>
                           </td>
@@ -146,10 +148,10 @@ export default function EditarEliminarProducto() {
                       <td colSpan="6" className="text-center py-4">
                         {loading ? (
                           <div className="spinner-border text-danger" role="status">
-                            <span className="visually-hidden">Cargando productos...</span>
+                            <span className="visually-hidden">{t("loading")}</span>
                           </div>
                         ) : (
-                          <p className="text-muted mb-0">No hay productos registrados en el catálogo.</p>
+                          <p className="text-muted mb-0">{t("no_products_registered")}</p>
                         )}
                       </td>
                     </tr>
@@ -160,20 +162,19 @@ export default function EditarEliminarProducto() {
           </div>
         </div>
 
-        {/* Modal Editar */}
         {productoEditado && (
           <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <div className="modal-dialog modal-dialog-centered modal-lg">
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <form onSubmit={guardarCambios}>
                   <div className="modal-header petly-navbar text-white">
-                    <h5 className="modal-title fw-bold">✏️ Editar Producto</h5>
+                    <h5 className="modal-title fw-bold">{t("edit_product_modal_title")}</h5>
                     <button type="button" className="btn-close btn-close-white" onClick={() => setProductoEditado(null)}></button>
                   </div>
                   <div className="modal-body p-4 text-start">
                     <div className="row g-3">
                       <div className="col-md-8">
-                        <label className="form-label small fw-semibold">Nombre del Producto</label>
+                        <label className="form-label small fw-semibold">{t("product_name_label")}</label>
                         <input
                           type="text"
                           className="form-control"
@@ -184,21 +185,21 @@ export default function EditarEliminarProducto() {
                       </div>
 
                       <div className="col-md-4">
-                        <label className="form-label small fw-semibold">Especie</label>
+                        <label className="form-label small fw-semibold">{t("species_label")}</label>
                         <select
                           className="form-select"
                           value={productoEditado.idEspecie || productoEditado.id_especie || 1}
                           onChange={(e) => setProductoEditado({ ...productoEditado, idEspecie: e.target.value, id_especie: e.target.value })}
                           required
                         >
-                          <option value="1">1: Perro 🐶</option>
-                          <option value="2">2: Gato 🐱</option>
-                          <option value="3">3: Exótico 🦜</option>
+                          <option value="1">{t("species_dog")}</option>
+                          <option value="2">{t("species_cat")}</option>
+                          <option value="3">{t("species_exotic")}</option>
                         </select>
                       </div>
 
                       <div className="col-md-6">
-                        <label className="form-label small fw-semibold">Precio ($ CLP)</label>
+                        <label className="form-label small fw-semibold">{t("price_clp_label")}</label>
                         <input
                           type="number"
                           className="form-control"
@@ -211,7 +212,7 @@ export default function EditarEliminarProducto() {
                       </div>
 
                       <div className="col-md-6">
-                        <label className="form-label small fw-semibold">Stock</label>
+                        <label className="form-label small fw-semibold">{t("stock_label")}</label>
                         <input
                           type="number"
                           className="form-control"
@@ -222,15 +223,14 @@ export default function EditarEliminarProducto() {
                         />
                       </div>
 
-                      {/* Selector de Marcas */}
                       <div className="col-md-6">
-                        <label className="form-label small fw-semibold">Marca</label>
+                        <label className="form-label small fw-semibold">{t("brand_label")}</label>
                         <select
                           className="form-select"
                           value={productoEditado.idMarca || ""}
                           onChange={(e) => setProductoEditado({ ...productoEditado, idMarca: e.target.value })}
                         >
-                          <option value="">Sin marca</option>
+                          <option value="">{t("no_brand_option")}</option>
                           {marcas && marcas.map((m) => {
                             const id = m.idMarca || m.id_marca || m.id;
                             const nombre = m.nombreMarca || m.nom_marca || m.nombre;
@@ -243,15 +243,14 @@ export default function EditarEliminarProducto() {
                         </select>
                       </div>
 
-                      {/* Selector de Categorías */}
                       <div className="col-md-6">
-                        <label className="form-label small fw-semibold">Categoría</label>
+                        <label className="form-label small fw-semibold">{t("category_label")}</label>
                         <select
                           className="form-select"
                           value={productoEditado.idCategoria || ""}
                           onChange={(e) => setProductoEditado({ ...productoEditado, idCategoria: e.target.value })}
                         >
-                          <option value="">Sin categoría</option>
+                          <option value="">{t("no_category_option")}</option>
                           {categorias && categorias.map((cat) => {
                             const id = cat.idCategoria || cat.id_categoria || cat.id;
                             const nombre = cat.nombreCategoria || cat.nom_cat || cat.nombre;
@@ -265,7 +264,7 @@ export default function EditarEliminarProducto() {
                       </div>
 
                       <div className="col-12">
-                        <label className="form-label small fw-semibold">URL de la Imagen</label>
+                        <label className="form-label small fw-semibold">{t("image_url_label")}</label>
                         <input
                           type="text"
                           className="form-control"
@@ -275,7 +274,7 @@ export default function EditarEliminarProducto() {
                       </div>
 
                       <div className="col-12">
-                        <label className="form-label small fw-semibold">Descripción</label>
+                        <label className="form-label small fw-semibold">{t("desc_label")}</label>
                         <textarea
                           className="form-control"
                           rows="3"
@@ -287,8 +286,8 @@ export default function EditarEliminarProducto() {
                     </div>
                   </div>
                   <div className="modal-footer bg-light">
-                    <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setProductoEditado(null)}>Cancelar</button>
-                    <button type="submit" className="petly-btn py-2 px-3">Guardar cambios</button>
+                    <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setProductoEditado(null)}>{t("cancel")}</button>
+                    <button type="submit" className="petly-btn py-2 px-3">{t("save_changes")}</button>
                   </div>
                 </form>
               </div>
@@ -301,16 +300,16 @@ export default function EditarEliminarProducto() {
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <div className="modal-header bg-danger text-white">
-                  <h5 className="modal-title fw-bold">🗑️ Confirmar Eliminación</h5>
+                  <h5 className="modal-title fw-bold">{t("confirm_delete")}</h5>
                   <button type="button" className="btn-close btn-close-white" onClick={() => setProductoEliminar(null)}></button>
                 </div>
                 <div className="modal-body p-4 text-center">
-                  <p className="mb-1">¿Estás seguro de que deseas eliminar este producto?</p>
+                  <p className="mb-1">{t("confirm_delete_product_msg")}</p>
                   <strong className="d-block fs-5 text-dark mt-2">{productoEliminar.nombreProducto || productoEliminar.nom_prod || productoEliminar.nombre}</strong>
                 </div>
                 <div className="modal-footer bg-light justify-content-center">
-                  <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setProductoEliminar(null)}>Cancelar</button>
-                  <button type="button" className="btn btn-danger py-2 px-3 fw-bold rounded-3" onClick={confirmarEliminar}>Sí, eliminar</button>
+                  <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setProductoEliminar(null)}>{t("cancel")}</button>
+                  <button type="button" className="btn btn-danger py-2 px-3 fw-bold rounded-3" onClick={confirmarEliminar}>{t("yes_delete")}</button>
                 </div>
               </div>
             </div>

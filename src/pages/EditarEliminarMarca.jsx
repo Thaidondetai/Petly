@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
@@ -9,6 +10,7 @@ const getAuthHeaders = () => {
 };
 
 export default function EditarEliminarMarca() {
+  const { t } = useTranslation();
   const [marcas, setMarcas] = useState([]);
   const [marcaEditada, setMarcaEditada] = useState(null);
   const [marcaEliminar, setMarcaEliminar] = useState(null);
@@ -43,7 +45,7 @@ export default function EditarEliminarMarca() {
 
     const nombre = marcaEditada.nombreMarca || marcaEditada.nombre;
     if (!nombre || nombre.trim() === "") {
-      alert("Debes ingresar un nombre para la marca.");
+      alert(t("brand_alert_empty"));
       return;
     }
 
@@ -58,7 +60,7 @@ export default function EditarEliminarMarca() {
         },
         getAuthHeaders()
       );
-      alert("¡Marca actualizada exitosamente!");
+      alert(t("brand_updated_success"));
       cargarMarcas();
       setMarcaEditada(null);
     } catch (err) {
@@ -75,7 +77,7 @@ export default function EditarEliminarMarca() {
     const idMarca = marcaEliminar.idMarca || marcaEliminar.id;
     try {
       await axios.delete(`${API_URL}/${idMarca}`, getAuthHeaders());
-      alert("Marca eliminada exitosamente.");
+      alert(t("brand_deleted_success"));
       cargarMarcas();
       setMarcaEliminar(null);
     } catch (err) {
@@ -89,16 +91,16 @@ export default function EditarEliminarMarca() {
       <div className="container">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
           <div>
-            <span className="section-label">PRODUCTOS</span>
-            <h1 className="petly-title mb-1 fs-3">Gestión de Marcas 🏷️</h1>
-            <p className="petly-subtitle mb-0">Crea, edita o elimina marcas registradas</p>
+            <span className="section-label">{t("products_section")}</span>
+            <h1 className="petly-title mb-1 fs-3">{t("manage_brands_title")}</h1>
+            <p className="petly-subtitle mb-0">{t("manage_brands_subtitle")}</p>
           </div>
           <div className="d-flex flex-wrap gap-2">
             <button className="petly-btn py-2 px-3 fw-semibold" onClick={() => navigate("/AgregarMarca")}>
-              ➕ Crear Marca
+              {t("create_brand_btn")}
             </button>
             <button className="petly-btn-outline py-2 px-3" onClick={() => navigate("/DashboardAdmin")}>
-              ⬅ Volver al Dashboard
+              {t("back_dashboard")}
             </button>
           </div>
         </div>
@@ -109,10 +111,10 @@ export default function EditarEliminarMarca() {
               <table className="table admin-table align-middle text-center mb-0">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th className="text-start">Nombre de Marca</th>
-                    <th className="text-start">Descripción</th>
-                    <th>Acciones</th>
+                    <th>{t("col_id")}</th>
+                    <th className="text-start">{t("brand_name_label")}</th>
+                    <th className="text-start">{t("brand_desc_label")}</th>
+                    <th>{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -124,20 +126,20 @@ export default function EditarEliminarMarca() {
                         <tr key={id}>
                           <td className="text-muted fw-semibold">#{id}</td>
                           <td className="fw-semibold text-start">{nombre}</td>
-                          <td className="text-muted text-start small">{m.descripcion || "Sin descripción"}</td>
+                          <td className="text-muted text-start small">{m.descripcion || t("no_brand_desc")}</td>
                           <td>
                             <div className="d-flex justify-content-center gap-2">
                               <button
                                 className="btn btn-sm btn-outline-warning"
                                 onClick={() => abrirEditar(m)}
                               >
-                                ✏️ Editar
+                                {t("edit")}
                               </button>
                               <button
                                 className="btn btn-sm btn-outline-danger"
                                 onClick={() => abrirEliminar(m)}
                               >
-                                🗑️ Eliminar
+                                {t("delete")}
                               </button>
                             </div>
                           </td>
@@ -149,10 +151,10 @@ export default function EditarEliminarMarca() {
                       <td colSpan="4" className="text-center py-4">
                         {loading ? (
                           <div className="spinner-border text-danger" role="status">
-                            <span className="visually-hidden">Cargando marcas...</span>
+                            <span className="visually-hidden">{t("loading")}</span>
                           </div>
                         ) : (
-                          <p className="text-muted mb-0">No hay marcas registradas en el sistema.</p>
+                          <p className="text-muted mb-0">{t("no_brands_registered")}</p>
                         )}
                       </td>
                     </tr>
@@ -169,12 +171,12 @@ export default function EditarEliminarMarca() {
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <form onSubmit={guardarCambios}>
                   <div className="modal-header petly-navbar text-white">
-                    <h5 className="modal-title fw-bold">✏️ Editar Marca</h5>
+                    <h5 className="modal-title fw-bold">{t("edit")}</h5>
                     <button type="button" className="btn-close btn-close-white" onClick={() => setMarcaEditada(null)}></button>
                   </div>
                   <div className="modal-body p-4 text-start">
                     <div className="mb-3">
-                      <label className="form-label small fw-semibold">Nombre de la Marca</label>
+                      <label className="form-label small fw-semibold">{t("brand_name_label")}</label>
                       <input
                         type="text"
                         className="form-control"
@@ -191,7 +193,7 @@ export default function EditarEliminarMarca() {
                       />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label small fw-semibold">Descripción</label>
+                      <label className="form-label small fw-semibold">{t("brand_desc_label")}</label>
                       <textarea
                         className="form-control"
                         rows="3"
@@ -204,10 +206,10 @@ export default function EditarEliminarMarca() {
                   </div>
                   <div className="modal-footer bg-light">
                     <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setMarcaEditada(null)}>
-                      Cancelar
+                      {t("cancel")}
                     </button>
                     <button type="submit" className="petly-btn py-2 px-3">
-                      Guardar cambios
+                      {t("save_changes")}
                     </button>
                   </div>
                 </form>
@@ -221,24 +223,22 @@ export default function EditarEliminarMarca() {
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <div className="modal-header bg-danger text-white">
-                  <h5 className="modal-title fw-bold">🗑️ Confirmar Eliminación</h5>
+                  <h5 className="modal-title fw-bold">{t("confirm_delete")}</h5>
                   <button type="button" className="btn-close btn-close-white" onClick={() => setMarcaEliminar(null)}></button>
                 </div>
                 <div className="modal-body p-4 text-center">
-                  <p className="mb-1">¿Estás seguro de que deseas eliminar esta marca?</p>
+                  <p className="mb-1">{t("confirm_delete_brand_msg")}</p>
                   <strong className="d-block fs-5 text-dark mt-2">
                     {marcaEliminar.nombreMarca || marcaEliminar.nombre}
                   </strong>
-                  <small className="text-muted">
-                    Los productos asociados a esta marca podrían verse afectados.
-                  </small>
+                  <small className="text-muted">{t("brand_delete_note")}</small>
                 </div>
                 <div className="modal-footer bg-light justify-content-center">
                   <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setMarcaEliminar(null)}>
-                    Cancelar
+                    {t("cancel")}
                   </button>
                   <button type="button" className="btn btn-danger py-2 px-3 fw-bold rounded-3" onClick={confirmarEliminar}>
-                    Sí, eliminar
+                    {t("yes_delete")}
                   </button>
                 </div>
               </div>

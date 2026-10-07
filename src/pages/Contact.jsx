@@ -1,7 +1,10 @@
 import FooterComponent from "../components/FooterComp";
 import NavComponent from "../components/NavComp";
+import { useTranslation } from "react-i18next";
 
 function Contact() {
+  const { t } = useTranslation();
+
   return (
     <>
       <NavComponent />
@@ -14,11 +17,11 @@ function Contact() {
             </span>
 
             <h1 className="petly-title fs-2 mb-2">
-              Contacto
+              {t("contact_title")}
             </h1>
 
             <p className="petly-subtitle">
-              ¿Tienes alguna duda? Estamos aquí para ayudarte.
+              {t("contact_subtitle")}
             </p>
           </div>
         </div>

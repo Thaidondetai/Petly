@@ -2,8 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ProductoContext } from "../context/ProductoContext";
+import { useTranslation } from "react-i18next";
 
 export default function EditarEliminarCategoria() {
+  const { t } = useTranslation();
   const [categoriaEditada, setCategoriaEditada] = useState(null);
   const [categoriaEliminar, setCategoriaEliminar] = useState(null);
 
@@ -23,7 +25,7 @@ export default function EditarEliminarCategoria() {
 
     const nombre = categoriaEditada.nombreCategoria || categoriaEditada.nombre;
     if (!nombre || nombre.trim() === "") {
-      alert("Debes ingresar un nombre para la categoría.");
+      alert(t("category_alert_empty"));
       return;
     }
 
@@ -46,7 +48,7 @@ export default function EditarEliminarCategoria() {
         throw new Error(`Error ${response.status}`);
       }
 
-      alert("¡Categoría actualizada exitosamente!");
+      alert(t("category_updated_success"));
       cargarCategorias();
       setCategoriaEditada(null);
     } catch (err) {
@@ -63,7 +65,7 @@ export default function EditarEliminarCategoria() {
     const id = categoriaEliminar.idCategoria || categoriaEliminar.id;
     try {
       await eliminarCategoria(id);
-      alert("Categoría eliminada exitosamente. Los productos asociados permanecen disponibles en 'Todas'.");
+      alert(t("category_deleted_success"));
       setCategoriaEliminar(null);
     } catch (err) {
       console.error("Error al eliminar categoría:", err);
@@ -76,12 +78,12 @@ export default function EditarEliminarCategoria() {
       <div className="container">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
           <div>
-            <span className="section-label">CATÁLOGO</span>
-            <h1 className="petly-title mb-1 fs-3">Gestión de Categorías 🏷️</h1>
-            <p className="petly-subtitle mb-0">Edita o elimina categorías del catálogo</p>
+            <span className="section-label">{t("catalog_section")}</span>
+            <h1 className="petly-title mb-1 fs-3">{t("manage_categories_title")}</h1>
+            <p className="petly-subtitle mb-0">{t("manage_categories_subtitle")}</p>
           </div>
           <button className="petly-btn-outline" onClick={() => navigate("/DashboardAdmin")}>
-            ⬅ Volver al Dashboard
+            {t("back_dashboard")}
           </button>
         </div>
 
@@ -91,9 +93,9 @@ export default function EditarEliminarCategoria() {
               <table className="table admin-table align-middle text-center mb-0">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th className="text-start">Nombre de Categoría</th>
-                    <th>Acciones</th>
+                    <th>{t("col_id")}</th>
+                    <th className="text-start">{t("category_name_label")}</th>
+                    <th>{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -111,13 +113,13 @@ export default function EditarEliminarCategoria() {
                                 className="btn btn-sm btn-outline-warning"
                                 onClick={() => abrirEditar(c)}
                               >
-                                ✏️ Editar
+                                {t("edit")}
                               </button>
                               <button
                                 className="btn btn-sm btn-outline-danger"
                                 onClick={() => abrirEliminar(c)}
                               >
-                                🗑️ Eliminar
+                                {t("delete")}
                               </button>
                             </div>
                           </td>
@@ -129,10 +131,10 @@ export default function EditarEliminarCategoria() {
                       <td colSpan="3" className="text-center py-4">
                         {loading ? (
                           <div className="spinner-border text-danger" role="status">
-                            <span className="visually-hidden">Cargando categorías...</span>
+                            <span className="visually-hidden">{t("loading")}</span>
                           </div>
                         ) : (
-                          <p className="text-muted mb-0">No hay categorías registradas en el catálogo.</p>
+                          <p className="text-muted mb-0">{t("no_categories_registered")}</p>
                         )}
                       </td>
                     </tr>
@@ -149,12 +151,12 @@ export default function EditarEliminarCategoria() {
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <form onSubmit={guardarCambios}>
                   <div className="modal-header petly-navbar text-white">
-                    <h5 className="modal-title fw-bold">✏️ Editar Categoría</h5>
+                    <h5 className="modal-title fw-bold">{t("edit")}</h5>
                     <button type="button" className="btn-close btn-close-white" onClick={() => setCategoriaEditada(null)}></button>
                   </div>
                   <div className="modal-body p-4 text-start">
                     <div className="mb-3">
-                      <label className="form-label small fw-semibold">Nombre de la Categoría</label>
+                      <label className="form-label small fw-semibold">{t("category_name_label")}</label>
                       <input
                         type="text"
                         className="form-control"
@@ -169,10 +171,10 @@ export default function EditarEliminarCategoria() {
                   </div>
                   <div className="modal-footer bg-light">
                     <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setCategoriaEditada(null)}>
-                      Cancelar
+                      {t("cancel")}
                     </button>
                     <button type="submit" className="petly-btn py-2 px-3">
-                      Guardar cambios
+                      {t("save_changes")}
                     </button>
                   </div>
                 </form>
@@ -186,22 +188,22 @@ export default function EditarEliminarCategoria() {
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 <div className="modal-header bg-danger text-white">
-                  <h5 className="modal-title fw-bold">🗑️ Confirmar Eliminación</h5>
+                  <h5 className="modal-title fw-bold">{t("confirm_delete")}</h5>
                   <button type="button" className="btn-close btn-close-white" onClick={() => setCategoriaEliminar(null)}></button>
                 </div>
                 <div className="modal-body p-4 text-center">
-                  <p className="mb-1">¿Estás seguro de que deseas eliminar esta categoría?</p>
+                  <p className="mb-1">{t("confirm_delete_category_msg")}</p>
                   <strong className="d-block fs-5 text-dark mt-2">
                     {categoriaEliminar.nombreCategoria || categoriaEliminar.nombre}
                   </strong>
-                  <small className="text-muted">Los productos mantendrán su información y estarán disponibles bajo la categoría "Todas".</small>
+                  <small className="text-muted">{t("category_delete_note")}</small>
                 </div>
                 <div className="modal-footer bg-light justify-content-center">
                   <button type="button" className="petly-btn-outline py-2 px-3" onClick={() => setCategoriaEliminar(null)}>
-                    Cancelar
+                    {t("cancel")}
                   </button>
                   <button type="button" className="btn btn-danger py-2 px-3 fw-bold rounded-3" onClick={confirmarEliminar}>
-                    Sí, eliminar
+                    {t("yes_delete")}
                   </button>
                 </div>
               </div>

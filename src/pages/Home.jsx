@@ -5,8 +5,10 @@ import NavComponent from "../components/NavComp";
 import CardComponent from "../components/CardComp";
 import { useSearchParams } from "react-router-dom";
 import { ProductoContext } from "../context/ProductoContext";
+import { useTranslation } from "react-i18next";
 
 function Home() {
+  const { t } = useTranslation();
   const { productos, categorias, categoriaSeleccionada, seleccionarCategoria, loading } = useContext(ProductoContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const busqueda = searchParams.get("buscar") || "";
@@ -36,7 +38,7 @@ function Home() {
         <div className="container">
           <section className="categorias-section mb-5">
             <div className="section-heading mb-3">
-              <h2 className="petly-title fs-4">Categorías principales</h2>
+              <h2 className="petly-title fs-4">{t("main_categories")}</h2>
             </div>
 
             <div className="categorias-grid">
@@ -45,7 +47,7 @@ function Home() {
                 onClick={() => seleccionarCategoriaYLimpiarBusqueda(null)}
                 style={{ cursor: 'pointer' }}
               >
-                <span>Todas</span>
+                <span>{t("all_categories")}</span>
               </div>
 
               {categorias.map((cat) => (
@@ -62,16 +64,16 @@ function Home() {
           </section>
 
           <div className="section-heading mb-4">
-            <h2 className="petly-title fs-4">Productos destacados</h2>
-            <p className="petly-subtitle">Todo lo que necesitas para cuidar a tu mascota.</p>
+            <h2 className="petly-title fs-4">{t("featured_products")}</h2>
+            <p className="petly-subtitle">{t("featured_subtitle")}</p>
           </div>
 
           {loading ? (
-            <p className="text-muted">Cargando productos...</p>
+            <p className="text-muted">{t("loading_products")}</p>
           ) : (
             <div className="row g-4">
               {productosFiltrados.length === 0 ? (
-                <p className="text-muted">No se encontraron productos para esta búsqueda o categoría.</p>
+                <p className="text-muted">{t("no_products_found")}</p>
               ) : (
                 productosFiltrados.map((p) => (
                   <div className="col-12 col-sm-6 col-lg-4" key={p.idProducto}>

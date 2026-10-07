@@ -15,6 +15,7 @@ import EditarEliminarMarca from "./pages/EditarEliminarMarca";
 import AgregarMarca from "./pages/AgregarMarca";
 
 import { ProductoProvider } from "./context/ProductoContext";
+import { CurrencyProvider } from "./context/CurrencyContext"; // Importación del Contexto de Moneda
 
 function RutaAdminProtegida({ children }) {
   const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
@@ -89,73 +90,75 @@ function App() {
   }, []);
 
   return (
-    <ProductoProvider>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Carro" element={<Carro />} />
-        <Route path="/Contacto" element={<Contact />} />
-        <Route path="/Producto" element={<ProductPage />} />
-        <Route path="/Perfil" element={<ProfilePage />} />
+    <CurrencyProvider>
+      <ProductoProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Carro" element={<Carro />} />
+          <Route path="/Contacto" element={<Contact />} />
+          <Route path="/Producto" element={<ProductPage />} />
+          <Route path="/Perfil" element={<ProfilePage />} />
 
-        <Route
-          path="/DashboardAdmin"
-          element={
-            <RutaAdminProtegida>
-              <DashboardAdmin />
-            </RutaAdminProtegida>
-          }
-        />
-        <Route
-          path="/AgregarProducto"
-          element={
-            <RutaAdminProtegida>
-              <AgregarProducto />
-            </RutaAdminProtegida>
-          }
-        />
-        <Route
-          path="/EditarEliminarProducto"
-          element={
-            <RutaAdminProtegida>
-              <EditarEliminarProducto />
-            </RutaAdminProtegida>
-          }
-        />
-        <Route
-          path="/AgregarCategoria"
-          element={
-            <RutaAdminProtegida>
-              <AgregarCategoria />
-            </RutaAdminProtegida>
-          }
-        />
-        <Route
-          path="/EditarCategoria"
-          element={
-            <RutaAdminProtegida>
-              <EditarEliminarCategoria />
-            </RutaAdminProtegida>
-          }
-        />
-        <Route
-          path="/AgregarMarca"
-          element={
-            <RutaAdminProtegida>
-              <AgregarMarca />
-            </RutaAdminProtegida>
-          }
-        />
-        <Route
-          path="/EditarEliminarMarca"
-          element={
-            <RutaAdminProtegida>
-              <EditarEliminarMarca />
-            </RutaAdminProtegida>
-          }
-        />
-      </Routes>
-    </ProductoProvider>
+          <Route
+            path="/DashboardAdmin"
+            element={
+              <RutaAdminProtegida>
+                <DashboardAdmin />
+              </RutaAdminProtegida>
+            }
+          />
+          <Route
+            path="/AgregarProducto"
+            element={
+              <RutaAdminProtegida>
+                <AgregarProducto />
+              </RutaAdminProtegida>
+            }
+          />
+          <Route
+            path="/EditarEliminarProducto"
+            element={
+              <RutaAdminProtegida>
+                <EditarEliminarProducto />
+              </RutaAdminProtegida>
+            }
+          />
+          <Route
+            path="/AgregarCategoria"
+            element={
+              <RutaAdminProtegida>
+                <AgregarCategoria />
+              </RutaAdminProtegida>
+            }
+          />
+          <Route
+            path="/EditarCategoria"
+            element={
+              <RutaAdminProtegida>
+                <EditarEliminarCategoria />
+              </RutaAdminProtegida>
+            }
+          />
+          <Route
+            path="/AgregarMarca"
+            element={
+              <RutaAdminProtegida>
+                <AgregarMarca />
+              </RutaAdminProtegida>
+            }
+          />
+          <Route
+            path="/EditarEliminarMarca"
+            element={
+              <RutaAdminProtegida>
+                <EditarEliminarMarca />
+              </RutaAdminProtegida>
+            }
+          />
+        </Routes>
+      </ProductoProvider>
+    </CurrencyProvider>
   );
 }
 

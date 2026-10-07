@@ -6,8 +6,10 @@ import NavComponent from '../components/NavComp';
 import FooterComponent from '../components/FooterComp';
 import { ProductoContext } from '../context/ProductoContext';
 import { DEFAULT_IMAGE, handleImageError } from '../utils/constants';
+import { useTranslation } from 'react-i18next';
 
 function DashboardAdmin() {
+  const { t } = useTranslation();
   const { productos } = useContext(ProductoContext);
 
   const ultimosProductos = useMemo(() => {
@@ -22,16 +24,16 @@ function DashboardAdmin() {
       <main className="petly-simple-page py-5">
         <div className="container">
           <div className="mb-4">
-            <span className="section-label">PANEL DE CONTROL</span>
-            <h1 className="petly-title mb-1">Hola, Administrador 🐾</h1>
-            <p className="petly-subtitle">Resumen general y administración de la plataforma Petly</p>
+            <span className="section-label">{t("admin_section")}</span>
+            <h1 className="petly-title mb-1">{t("admin_hello")}</h1>
+            <p className="petly-subtitle">{t("admin_subtitle")}</p>
           </div>
 
           <div className="row g-4 mb-4">
             <div className="col-12 col-md-4">
               <div className="card admin-card-stat p-3">
                 <div className="card-body">
-                  <span className="stat-title">Usuarios Nuevos 👥</span>
+                  <span className="stat-title">{t("stat_new_users")}</span>
                   <p className="stat-number mt-2">120</p>
                 </div>
               </div>
@@ -40,7 +42,7 @@ function DashboardAdmin() {
             <div className="col-12 col-md-4">
               <div className="card admin-card-stat p-3">
                 <div className="card-body">
-                  <span className="stat-title">Ventas del Mes 🛒</span>
+                  <span className="stat-title">{t("stat_monthly_sales")}</span>
                   <p className="stat-number mt-2">450</p>
                 </div>
               </div>
@@ -49,7 +51,7 @@ function DashboardAdmin() {
             <div className="col-12 col-md-4">
               <div className="card admin-card-stat p-3">
                 <div className="card-body">
-                  <span className="stat-title">Ganancias del Mes 💰</span>
+                  <span className="stat-title">{t("stat_monthly_profit")}</span>
                   <p className="stat-number mt-2">$2.000.000</p>
                 </div>
               </div>
@@ -66,17 +68,17 @@ function DashboardAdmin() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Gestión de Productos
+                  {t("product_mgmt")}
                 </button>
                 <ul className="dropdown-menu w-100 admin-dropdown-menu" aria-labelledby="dropdownProductosBtn">
                   <li>
                     <Link className="dropdown-item admin-dropdown-item" to="/AgregarProducto">
-                      ➕ Agregar producto
+                      {t("add_product_opt")}
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item admin-dropdown-item" to="/EditarEliminarProducto">
-                      ✏️ Editar o eliminar producto
+                      {t("edit_delete_product_opt")}
                     </Link>
                   </li>
                 </ul>
@@ -92,22 +94,22 @@ function DashboardAdmin() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Gestión de Catálogo
+                  {t("catalog_mgmt")}
                 </button>
                 <ul className="dropdown-menu w-100 admin-dropdown-menu" aria-labelledby="dropdownCatalogoBtn">
                   <li>
                     <Link className="dropdown-item admin-dropdown-item" to="/AgregarCategoria">
-                      ➕ Agregar categorías
+                      {t("add_category_opt")}
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item admin-dropdown-item" to="/EditarCategoria">
-                      ✏️ Editar o eliminar categorías
+                      {t("edit_delete_category_opt")}
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item admin-dropdown-item" to="/EditarEliminarMarca">
-                      🏷️ Gestión de Marcas
+                      {t("brand_mgmt_opt")}
                     </Link>
                   </li>
                 </ul>
@@ -120,19 +122,19 @@ function DashboardAdmin() {
               <div className="card admin-table-card">
                 <div className="card-body p-4">
                   <div className="mb-3">
-                    <h2 className="petly-title fs-4 mb-1">Últimos 5 Productos Añadidos</h2>
-                    <p className="petly-subtitle mb-0">Lista de productos registrados recientemente en Petly</p>
+                    <h2 className="petly-title fs-4 mb-1">{t("recent_products_title")}</h2>
+                    <p className="petly-subtitle mb-0">{t("recent_products_subtitle")}</p>
                   </div>
 
                   <div className="table-responsive">
                     <table className="table admin-table align-middle text-center mb-0">
                       <thead>
                         <tr>
-                          <th>ID</th>
-                          <th>Imagen</th>
-                          <th className="text-start">Nombre del Producto</th>
-                          <th>Precio</th>
-                          <th>Stock</th>
+                          <th>{t("col_id")}</th>
+                          <th>{t("col_image")}</th>
+                          <th className="text-start">{t("col_name")}</th>
+                          <th>{t("col_price")}</th>
+                          <th>{t("col_stock")}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -161,7 +163,7 @@ function DashboardAdmin() {
                           })
                         ) : (
                           <tr>
-                            <td colSpan="5" className="text-muted py-4">No hay productos registrados.</td>
+                            <td colSpan="5" className="text-muted py-4">{t("no_products_registered")}</td>
                           </tr>
                         )}
                       </tbody>

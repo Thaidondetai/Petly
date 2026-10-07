@@ -1,0 +1,382 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+const resources = {
+  es: {
+    translation: {
+      // Navbar & General
+      placeholder_search: "Buscar alimentos, juguetes, accesorios...",
+      search: "Buscar",
+      admin_panel: "Panel Admin",
+      cart: "Carro",
+      contact: "Contacto",
+      profile: "Mi Perfil",
+      logout: "Cerrar Sesión",
+      login: "Iniciar sesión",
+      back: "Volver",
+      back_home: "Volver al inicio",
+      back_dashboard: "⬅ Volver al Dashboard",
+      save: "Guardar",
+      saving: "Guardando...",
+      add: "Agregar",
+      actions: "Acciones",
+      edit: "✏️ Editar",
+      delete: "🗑️ Eliminar",
+      cancel: "Cancelar",
+      save_changes: "Guardar cambios",
+      yes_delete: "Sí, eliminar",
+      confirm_delete: "🗑️ Confirmar Eliminación",
+      loading: "Cargando...",
+      catalog_section: "CATÁLOGO",
+      inventory_section: "INVENTARIO",
+      admin_section: "PANEL DE CONTROL",
+      products_section: "PRODUCTOS",
+      account_section: "MI CUENTA",
+
+      // Home Page
+      main_categories: "Categorías principales",
+      all_categories: "Todas",
+      featured_products: "Productos destacados",
+      featured_subtitle: "Todo lo que necesitas para cuidar a tu mascota.",
+      no_products_found: "No se encontraron productos para esta búsqueda o categoría.",
+      loading_products: "Cargando productos...",
+
+      // AgregarCategoria / EditarEliminarCategoria
+      new_category_title: "Nueva Categoría 🏷️",
+      new_category_subtitle: "Ingresa el nombre para clasificar tus productos",
+      category_name_label: "Nombre de la categoría",
+      category_placeholder: "Ej. Alimentos, Juguetes, Higiene...",
+      manage_categories_title: "Gestión de Categorías 🏷️",
+      manage_categories_subtitle: "Edita o elimina categorías del catálogo",
+      category_alert_empty: "Por favor ingresa un nombre para la categoría.",
+      category_added_success: "¡Categoría agregada correctamente!",
+      category_updated_success: "¡Categoría actualizada exitosamente!",
+      category_deleted_success: "Categoría eliminada exitosamente. Los productos asociados permanecen disponibles en 'Todas'.",
+      confirm_delete_category_msg: "¿Estás seguro de que deseas eliminar esta categoría?",
+      category_delete_note: "Los productos mantendrán su información y estarán disponibles bajo la categoría 'Todas'.",
+      no_categories_registered: "No hay categorías registradas en el catálogo.",
+
+      // AgregarMarca / EditarEliminarMarca
+      new_brand_title: "Nueva Marca 🏷️",
+      new_brand_subtitle: "Ingresa el nombre de una marca nueva para identificar la empresa de tus productos",
+      brand_name_label: "Nombre de la marca",
+      brand_placeholder: "Ej. Royal Canin, Pedigree, Whiskas...",
+      brand_desc_label: "Descripción de la marca",
+      brand_desc_placeholder: "Ej. Marca de alimentos para mascotas...",
+      manage_brands_title: "Gestión de Marcas 🏷️",
+      manage_brands_subtitle: "Crea, edita o elimina marcas registradas",
+      create_brand_btn: "➕ Crear Marca",
+      no_brand_desc: "Sin descripción",
+      brand_alert_empty: "Por favor ingresa un nombre para la marca.",
+      brand_added_success: "¡Marca agregada correctamente!",
+      brand_updated_success: "¡Marca actualizada exitosamente!",
+      brand_deleted_success: "Marca eliminada exitosamente.",
+      confirm_delete_brand_msg: "¿Estás seguro de que deseas eliminar esta marca?",
+      brand_delete_note: "Los productos asociados a esta marca podrían verse afectados.",
+      no_brands_registered: "No hay marcas registradas en el sistema.",
+
+      // AgregarProducto / EditarEliminarProducto
+      new_product_title: "Agregar Nuevo Producto 🐾",
+      new_product_subtitle: "Completa los datos para añadirlo al catálogo",
+      product_name_label: "Nombre del producto",
+      product_name_placeholder: "Ej. Alimento Premium Adulto",
+      species_label: "Especie",
+      species_dog: "1: Perro 🐶",
+      species_cat: "2: Gato 🐱",
+      species_exotic: "3: Exótico 🦜",
+      price_clp_label: "Precio ($ CLP)",
+      price_placeholder: "Ej. 15990",
+      stock_label: "Stock disponible",
+      stock_placeholder: "Ej. 50",
+      brand_label: "Marca",
+      no_brand_option: "Sin marca",
+      category_label: "Categoría",
+      no_category_option: "Sin categoría",
+      image_url_label: "Imagen (URL)",
+      image_url_placeholder: "Ej. https://...",
+      desc_label: "Descripción",
+      desc_placeholder: "Detalles del producto...",
+      add_product_btn: "Agregar Producto",
+      manage_products_title: "Gestión de Productos 🐾",
+      manage_products_subtitle: "Edita o elimina productos del catálogo de Petly",
+      edit_product_modal_title: "✏️ Editar Producto",
+      product_added_success: "¡Producto agregado correctamente!",
+      product_updated_success: "¡Producto actualizado exitosamente!",
+      product_deleted_success: "Producto eliminado exitosamente.",
+      confirm_delete_product_msg: "¿Estás seguro de que deseas eliminar este producto?",
+      no_products_registered: "No hay productos registrados en el catálogo.",
+
+      // Carro Page
+      your_cart_title: "Tu carrito",
+      your_cart_subtitle: "Revisa tus productos antes de comprar.",
+      empty_cart_msg: "No tienes productos en el carrito.",
+      view_products_btn: "Ver productos",
+      subtotal_label: "Subtotal",
+      total_label: "Total",
+      buy_btn: "Comprar",
+      processing_btn: "Procesando...",
+      buy_success_msg: "🎉 ¡Compra realizada con éxito! El stock ha sido actualizado en la tienda.",
+      login_required_buy: "Debes iniciar sesión para realizar una compra.",
+      empty_cart_alert: "Tu carrito está vacío.",
+      removed_unavailable_items: "Algunos productos de tu carrito fueron removidos porque ya no están disponibles en la tienda.",
+      max_stock_reached: "No puedes agregar más unidades. El stock disponible es de",
+
+      // Contact Page
+      contact_title: "Contacto",
+      contact_subtitle: "¿Tienes alguna duda? Estamos aquí para ayudarte.",
+
+      // Dashboard Admin
+      admin_hello: "Hola, Administrador 🐾",
+      admin_subtitle: "Resumen general y administración de la plataforma Petly",
+      stat_new_users: "Usuarios Nuevos 👥",
+      stat_monthly_sales: "Ventas del Mes 🛒",
+      stat_monthly_profit: "Ganancias del Mes 💰",
+      product_mgmt: "Gestión de Productos",
+      add_product_opt: "➕ Agregar producto",
+      edit_delete_product_opt: "✏️ Editar o eliminar producto",
+      catalog_mgmt: "Gestión de Catálogo",
+      add_category_opt: "➕ Agregar categorías",
+      edit_delete_category_opt: "✏️ Editar o eliminar categorías",
+      brand_mgmt_opt: "🏷️ Gestión de Marcas",
+      recent_products_title: "Últimos 5 Productos Añadidos",
+      recent_products_subtitle: "Lista de productos registrados recientemente en Petly",
+      col_id: "ID",
+      col_image: "Imagen",
+      col_name: "Nombre del Producto",
+      col_price: "Precio",
+      col_stock: "Stock",
+
+      // Login Page
+      login_title: "Iniciar sesión",
+      login_subtitle: "Accede a tu cuenta de Petly.",
+      continue_google: "Continuar con Google",
+
+      // Perfil Page
+      profile_title: "Perfil de Usuario",
+      profile_subtitle: "Gestiona tus datos personales y preferencias",
+      role_admin: "Administrador",
+      role_client: "Cliente",
+      active_session: "Sesión activa",
+      personal_info: "Información Personal",
+      label_user_name: "Nombre / Usuario",
+      label_email: "Correo Electrónico",
+      label_role: "Rol Asignado",
+
+      // ProductPage
+      loading_product_detail: "Cargando detalle del producto...",
+      product_not_found: "No se encontró el producto.",
+      back_to_catalog: "Volver al catálogo",
+
+      // Carousel
+      hero_slide1_title_line1: "Todo lo que tu",
+      hero_slide1_title_line2: "mascota necesita",
+      hero_slide1_desc_line1: "Alimentos, juguetes, camas y más.",
+      hero_slide1_desc_line2: "Para perros y gatos.",
+
+      hero_slide2_title_line1: "Para perros",
+      hero_slide2_title_line2: "y gatos",
+      hero_slide2_desc_line1: "Encuentra lo que necesitas",
+      hero_slide2_desc_line2: "para tus mascotas.",
+
+      hero_slide3_title_line1: "Cuida a quienes",
+      hero_slide3_title_line2: "más quieres",
+      hero_slide3_desc_line1: "Calidad y variedad",
+      hero_slide3_desc_line2: "en un solo lugar."
+    }
+  },
+  en: {
+    translation: {
+      // Navbar & General
+      placeholder_search: "Search food, toys, accessories...",
+      search: "Search",
+      admin_panel: "Admin Panel",
+      cart: "Cart",
+      contact: "Contact",
+      profile: "My Profile",
+      logout: "Log Out",
+      login: "Log In",
+      back: "Back",
+      back_home: "Back to home",
+      back_dashboard: "⬅ Back to Dashboard",
+      save: "Save",
+      saving: "Saving...",
+      add: "Add",
+      actions: "Actions",
+      edit: "✏️ Edit",
+      delete: "🗑️ Delete",
+      cancel: "Cancel",
+      save_changes: "Save changes",
+      yes_delete: "Yes, delete",
+      confirm_delete: "🗑️ Confirm Deletion",
+      loading: "Loading...",
+      catalog_section: "CATALOG",
+      inventory_section: "INVENTORY",
+      admin_section: "CONTROL PANEL",
+      products_section: "PRODUCTS",
+      account_section: "MY ACCOUNT",
+
+      // Home Page
+      main_categories: "Main categories",
+      all_categories: "All",
+      featured_products: "Featured products",
+      featured_subtitle: "Everything you need to take care of your pet.",
+      no_products_found: "No products were found for this search or category.",
+      loading_products: "Loading products...",
+
+      // AgregarCategoria / EditarEliminarCategoria
+      new_category_title: "New Category 🏷️",
+      new_category_subtitle: "Enter the name to classify your products",
+      category_name_label: "Category name",
+      category_placeholder: "e.g. Food, Toys, Hygiene...",
+      manage_categories_title: "Category Management 🏷️",
+      manage_categories_subtitle: "Edit or delete catalog categories",
+      category_alert_empty: "Please enter a category name.",
+      category_added_success: "Category added successfully!",
+      category_updated_success: "Category updated successfully!",
+      category_deleted_success: "Category deleted successfully. Associated products remain available under 'All'.",
+      confirm_delete_category_msg: "Are you sure you want to delete this category?",
+      category_delete_note: "Products will keep their details and remain available under the 'All' category.",
+      no_categories_registered: "No categories registered in the catalog.",
+
+      // AgregarMarca / EditarEliminarMarca
+      new_brand_title: "New Brand 🏷️",
+      new_brand_subtitle: "Enter the name of a new brand to identify your products' company",
+      brand_name_label: "Brand name",
+      brand_placeholder: "e.g. Royal Canin, Pedigree, Whiskas...",
+      brand_desc_label: "Brand description",
+      brand_desc_placeholder: "e.g. Pet food brand...",
+      manage_brands_title: "Brand Management 🏷️",
+      manage_brands_subtitle: "Create, edit, or delete registered brands",
+      create_brand_btn: "➕ Create Brand",
+      no_brand_desc: "No description",
+      brand_alert_empty: "Please enter a brand name.",
+      brand_added_success: "Brand added successfully!",
+      brand_updated_success: "Brand updated successfully!",
+      brand_deleted_success: "Brand deleted successfully.",
+      confirm_delete_brand_msg: "Are you sure you want to delete this brand?",
+      brand_delete_note: "Products associated with this brand might be affected.",
+      no_brands_registered: "No brands registered in the system.",
+
+      // AgregarProducto / EditarEliminarProducto
+      new_product_title: "Add New Product 🐾",
+      new_product_subtitle: "Fill in the details to add it to the catalog",
+      product_name_label: "Product name",
+      product_name_placeholder: "e.g. Adult Premium Food",
+      species_label: "Species",
+      species_dog: "1: Dog 🐶",
+      species_cat: "2: Cat 🐱",
+      species_exotic: "3: Exotic 🦜",
+      price_clp_label: "Price ($ CLP)",
+      price_placeholder: "e.g. 15990",
+      stock_label: "Available stock",
+      stock_placeholder: "e.g. 50",
+      brand_label: "Brand",
+      no_brand_option: "No brand",
+      category_label: "Category",
+      no_category_option: "No category",
+      image_url_label: "Image (URL)",
+      image_url_placeholder: "e.g. https://...",
+      desc_label: "Description",
+      desc_placeholder: "Product details...",
+      add_product_btn: "Add Product",
+      manage_products_title: "Product Management 🐾",
+      manage_products_subtitle: "Edit or delete products from the Petly catalog",
+      edit_product_modal_title: "✏️ Edit Product",
+      product_added_success: "Product added successfully!",
+      product_updated_success: "Product updated successfully!",
+      product_deleted_success: "Product deleted successfully.",
+      confirm_delete_product_msg: "Are you sure you want to delete this product?",
+      no_products_registered: "No products registered in the catalog.",
+
+      // Carro Page
+      your_cart_title: "Your cart",
+      your_cart_subtitle: "Review your items before buying.",
+      empty_cart_msg: "You have no products in your cart.",
+      view_products_btn: "View products",
+      subtotal_label: "Subtotal",
+      total_label: "Total",
+      buy_btn: "Checkout",
+      processing_btn: "Processing...",
+      buy_success_msg: "🎉 Purchase completed successfully! Stock has been updated in the store.",
+      login_required_buy: "You must log in to make a purchase.",
+      empty_cart_alert: "Your cart is empty.",
+      removed_unavailable_items: "Some products were removed from your cart because they are no longer available in the store.",
+      max_stock_reached: "You cannot add more units. Available stock is",
+
+      // Contact Page
+      contact_title: "Contact",
+      contact_subtitle: "Have any questions? We are here to help.",
+
+      // Dashboard Admin
+      admin_hello: "Hello, Admin 🐾",
+      admin_subtitle: "General summary and administration of the Petly platform",
+      stat_new_users: "New Users 👥",
+      stat_monthly_sales: "Monthly Sales 🛒",
+      stat_monthly_profit: "Monthly Profit 💰",
+      product_mgmt: "Product Management",
+      add_product_opt: "➕ Add product",
+      edit_delete_product_opt: "✏️ Edit or delete product",
+      catalog_mgmt: "Catalog Management",
+      add_category_opt: "➕ Add categories",
+      edit_delete_category_opt: "✏️ Edit or delete categories",
+      brand_mgmt_opt: "🏷️ Brand Management",
+      recent_products_title: "Last 5 Products Added",
+      recent_products_subtitle: "List of products recently registered in Petly",
+      col_id: "ID",
+      col_image: "Image",
+      col_name: "Product Name",
+      col_price: "Price",
+      col_stock: "Stock",
+
+      // Login Page
+      login_title: "Log In",
+      login_subtitle: "Access your Petly account.",
+      continue_google: "Continue with Google",
+
+      // Perfil Page
+      profile_title: "User Profile",
+      profile_subtitle: "Manage your personal information and preferences",
+      role_admin: "Administrator",
+      role_client: "Customer",
+      active_session: "Active session",
+      personal_info: "Personal Information",
+      label_user_name: "Name / User",
+      label_email: "Email Address",
+      label_role: "Assigned Role",
+
+      // ProductPage
+      loading_product_detail: "Loading product details...",
+      product_not_found: "Product not found.",
+      back_to_catalog: "Back to catalog",
+      // Carousel
+      hero_slide1_title_line1: "Everything your",
+      hero_slide1_title_line2: "pet needs",
+      hero_slide1_desc_line1: "Food, toys, beds and more.",
+      hero_slide1_desc_line2: "For dogs and cats.",
+
+      hero_slide2_title_line1: "For dogs",
+      hero_slide2_title_line2: "and cats",
+      hero_slide2_desc_line1: "Find everything you need",
+      hero_slide2_desc_line2: "for your pets.",
+
+      hero_slide3_title_line1: "Care for those",
+      hero_slide3_title_line2: "you love most",
+      hero_slide3_desc_line1: "Quality and variety",
+      hero_slide3_desc_line2: "all in one place."
+    }
+  }
+};
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: 'es',
+    interpolation: {
+      escapeValue: false
+    }
+  });
+
+export default i18n;
