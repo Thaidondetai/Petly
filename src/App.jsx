@@ -13,6 +13,8 @@ import AgregarCategoria from "./pages/AgregarCategoria";
 import EditarEliminarCategoria from "./pages/EditarEliminarCategoria";
 import EditarEliminarMarca from "./pages/EditarEliminarMarca";
 import AgregarMarca from "./pages/AgregarMarca";
+import { Checkout } from "./pages/Checkout";
+import { ConfirmacionPago } from "./pages/ConfirmacionPago";
 
 import { ProductoProvider } from "./context/ProductoContext";
 import { CurrencyProvider } from "./context/CurrencyContext"; // Importación del Contexto de Moneda
@@ -99,6 +101,8 @@ function App() {
           <Route path="/Contacto" element={<Contact />} />
           <Route path="/Producto" element={<ProductPage />} />
           <Route path="/Perfil" element={<ProfilePage />} />
+          <Route path="/Checkout" element={<Checkout />} />
+          <Route path="/ConfirmacionPago" element={<ConfirmacionPago />} />
 
           <Route
             path="/DashboardAdmin"
