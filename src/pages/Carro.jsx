@@ -5,16 +5,18 @@ import axios from "axios";
 import NavComponent from "../components/NavComp";
 import FooterComponent from "../components/FooterComp";
 import { ProductoContext } from "../context/ProductoContext";
+import { useCurrency } from "../context/CurrencyContext";
 import { DEFAULT_IMAGE, handleImageError } from "../utils/constants";
 import { useTranslation } from "react-i18next";
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 };
 
 function Carro() {
   const { t } = useTranslation();
+  const { formatPrice } = useCurrency();
   const [carritoDetallado, setCarritoDetallado] = useState([]);
   const [total, setTotal] = useState(0);
   const [procesando, setProcesando] = useState(false);
@@ -95,10 +97,10 @@ function Carro() {
     }
 
     const actualizado = carrito.map((item) =>
-      (item.idProducto || item.id) === idProducto ? {...item, cantidad: nuevaCantidad}: item
+      (item.idProducto || item.id) === idProducto ? { ...item, cantidad: nuevaCantidad } : item
     );
     guardarCarrito(actualizado);
-    
+
     const detallado = actualizado.map((item) => ({
       ...item,
       subtotal: item.precio * item.cantidad
@@ -110,7 +112,7 @@ function Carro() {
   const eliminarProducto = (idProducto) => {
     const carrito = leerCarrito().filter((item) => (item.idProducto || item.id) !== idProducto);
     guardarCarrito(carrito);
-    
+
     const detallado = carrito.map((item) => ({
       ...item,
       subtotal: item.precio * item.cantidad
@@ -119,69 +121,20 @@ function Carro() {
     setTotal(detallado.reduce((acc, p) => acc + p.subtotal, 0));
   };
 
-  const comprar = async () => {
+  const comprar = () => {
     if (carritoDetallado.length === 0) {
       alert(t("empty_cart_alert"));
       return;
     }
 
-    const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
     if (!token) {
       alert(t("login_required_buy"));
       navigate("/Login");
       return;
     }
 
-    setProcesando(true);
-    const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
-
-    try {
-      for (const item of carritoDetallado) {
-        const idProd = item.idProducto || item.id;
-        const res = await axios.get(`${BFF_URL}/api/bff/productos/${idProd}/detalle`, getAuthHeaders());
-        const productoBackend = res.data;
-
-        if (productoBackend.stock < item.cantidad) {
-          alert(`La compra falló: El producto "${item.nombreProducto || item.nom_prod}" solo cuenta con ${productoBackend.stock} unidades en stock.`);
-          setProcesando(false);
-          return;
-        }
-
-        const payloadDescuento = {
-          idProducto: parseInt(idProd, 10),
-          nombreProducto: productoBackend.nombreProducto || item.nombreProducto || "Producto",
-          precio: parseFloat(productoBackend.precio || item.precio),
-          stock: parseInt(productoBackend.stock - item.cantidad, 10),
-          descripcion: productoBackend.descripcion || item.descripcion || "Sin descripción",
-          urlImagen: productoBackend.urlImagen || item.urlImagen || "",
-          idMarca: productoBackend.idMarca ? parseInt(productoBackend.idMarca, 10) : null,
-          idCategoria: productoBackend.idCategoria ? parseInt(productoBackend.idCategoria, 10) : null,
-          idEspecie: parseInt(productoBackend.idEspecie || item.idEspecie || 1, 10)
-        };
-
-        await axios.put(
-          `${BFF_URL}/api/bff/productos/${idProd}/descontar-stock`,
-          payloadDescuento,
-          getAuthHeaders()
-        );
-      }
-
-      alert(t("buy_success_msg"));
-      localStorage.removeItem("carro");
-      setCarritoDetallado([]);
-      setTotal(0);
-
-      await cargarProductos();
-    } catch (error) {
-      console.error("Error procesando compra:", error);
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        alert("Tu sesión ha expirado o no tienes permisos para realizar la compra. Inicia sesión nuevamente.");
-      } else {
-        alert("Ocurrió un error al procesar la compra en el servidor.");
-      }
-    } finally {
-      setProcesando(false);
-    }
+    navigate("/Checkout");
   };
 
   return (
@@ -221,8 +174,10 @@ function Carro() {
                         />
                         <div>
                           <h5 className="mb-1 fw-bold fs-6">{item.nombreProducto || item.nom_prod}</h5>
-                          <p className="text-muted small mb-1">${item.precio?.toLocaleString("es-CL")}</p>
-                          <strong className="text-danger small">{t("subtotal_label")}: ${item.subtotal?.toLocaleString("es-CL")}</strong>
+                          <p className="text-muted small mb-1">{formatPrice(item.precio)}</p>
+                          <strong className="text-danger small">
+                            {t("subtotal_label")}: {formatPrice(item.subtotal)}
+                          </strong>
                         </div>
                       </div>
 
@@ -243,7 +198,7 @@ function Carro() {
               })}
 
               <div className="card p-4 mt-4 border-0 shadow-sm d-flex flex-row justify-content-between align-items-center" style={{ borderRadius: "12px" }}>
-                <h3 className="petly-title fs-4 mb-0">{t("total_label")}: ${total.toLocaleString("es-CL")}</h3>
+                <h3 className="petly-title fs-4 mb-0">{t("total_label")}: {formatPrice(total)}</h3>
                 <Button className="petly-btn" onClick={comprar} disabled={procesando}>
                   {procesando ? t("processing_btn") : t("buy_btn")}
                 </Button>

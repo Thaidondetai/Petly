@@ -2,7 +2,6 @@ import { createContext, useState, useContext } from 'react';
 
 export const CurrencyContext = createContext();
 
-
 const RATES = {
     CLP: 1,
     USD: 0.00105, // Ejemplo: 1 CLP = ~0.00105 USD
