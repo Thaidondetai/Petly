@@ -54,7 +54,13 @@ function Carro() {
       try {
         const res = await axios.get(`${BFF_URL}/api/bff/productos/${idProd}/detalle`, getAuthHeaders());
         if (res.data && (res.data.idProducto || res.data.id)) {
-          carritoValido.push(item);
+          // Enriquecemos con los datos del backend, incluyendo el estado sagValidated
+          carritoValido.push({
+            ...item,
+            ...res.data,
+            sagValidated: res.data.sagValidated ?? false,
+            requiereSag: res.data.requiereSag || res.data.requiere_sag || parseInt(res.data.idEspecie || res.data.id_especie, 10) === 3
+          });
         } else {
           huboEliminados = true;
         }
@@ -70,7 +76,7 @@ function Carro() {
 
     const detallado = carritoValido.map((item) => ({
       ...item,
-      subtotal: item.precio * item.cantidad
+      subtotal: (item.precio || 0) * (item.cantidad || 1)
     }));
 
     setCarritoDetallado(detallado);
@@ -103,7 +109,7 @@ function Carro() {
 
     const detallado = actualizado.map((item) => ({
       ...item,
-      subtotal: item.precio * item.cantidad
+      subtotal: (item.precio || 0) * item.cantidad
     }));
     setCarritoDetallado(detallado);
     setTotal(detallado.reduce((acc, p) => acc + p.subtotal, 0));
@@ -115,7 +121,7 @@ function Carro() {
 
     const detallado = carrito.map((item) => ({
       ...item,
-      subtotal: item.precio * item.cantidad
+      subtotal: (item.precio || 0) * item.cantidad
     }));
     setCarritoDetallado(detallado);
     setTotal(detallado.reduce((acc, p) => acc + p.subtotal, 0));
@@ -131,6 +137,18 @@ function Carro() {
     if (!token) {
       alert(t("login_required_buy"));
       navigate("/Login");
+      return;
+    }
+
+    // Validación estricta: verificar si hay productos exóticos pendientes de aprobación SAG por el administrador
+    const productoSinAprobar = carritoDetallado.find(item => {
+      const idEspecieNum = parseInt(item.idEspecie || item.id_especie || item.especieId, 10);
+      const esExotico = item.requiereSag === true || item.requiere_sag === true || idEspecieNum === 3;
+      return esExotico && !item.sagValidated;
+    });
+
+    if (productoSinAprobar) {
+      alert(`El producto "${productoSinAprobar.nombreProducto || productoSinAprobar.nombre}" es una especie exótica y está pendiente de validación SAG por el administrador.`);
       return;
     }
 

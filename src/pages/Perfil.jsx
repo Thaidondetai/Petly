@@ -35,23 +35,6 @@ function ProfilePage() {
     }
   }, []);
 
-  const cerrarSesion = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("id_token");
-
-    const domain = import.meta.env.VITE_COGNITO_DOMAIN;
-    const clientId = import.meta.env.VITE_COGNITO_CLIENT_ID;
-    const logoutUri = import.meta.env.VITE_COGNITO_LOGOUT_URI;
-
-    if (domain && clientId && logoutUri) {
-      window.location.href = `${domain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(
-        logoutUri
-      )}`;
-    } else {
-      navigate("/Login");
-    }
-  };
-
   return (
     <>
       <NavComponent />
@@ -74,12 +57,6 @@ function ProfilePage() {
                   {t("admin_panel")}
                 </button>
               )}
-              <button
-                className="btn btn-outline-danger py-2 px-3 fw-semibold rounded-3"
-                onClick={cerrarSesion}
-              >
-                {t("logout")}
-              </button>
             </div>
           </div>
 

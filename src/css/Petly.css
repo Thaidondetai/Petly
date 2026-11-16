@@ -627,3 +627,58 @@ button, input, select, textarea {
   border-radius: 10px;
   padding: 18px;
 }
+/* --- Estilos para la Validación SAG en el Dashboard de Admin --- */
+
+.admin-table-card.border-warning {
+  border: 1px solid #fef08a !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.08);
+}
+
+.admin-table-card .badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.admin-table-card .bg-warning {
+  background-color: #fef08a !important;
+  color: #713f12 !important;
+}
+
+.admin-table-card .bg-success {
+  background-color: #def7ec !important;
+  color: #03543f !important;
+}
+
+.admin-table-card code {
+  background-color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #d97706;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+}
+
+.admin-table-card .btn-warning {
+  background-color: #f97316;
+  border-color: #f97316;
+  transition: all 0.2s ease-in-out;
+}
+
+.admin-table-card .btn-warning:hover {
+  background-color: #ea580c;
+  border-color: #ea580c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(234, 88, 12, 0.3);
+}
+
+/* Imagen en miniatura de la tabla */
+.admin-prod-thumb {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #eaeaea;
+}

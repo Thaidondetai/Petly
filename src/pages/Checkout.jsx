@@ -16,7 +16,6 @@ export function Checkout() {
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
 
-  // Campos según la estructura original de Datos de Despacho
     const [datosEnvio, setDatosEnvio] = useState({
         nombreReceptor: "",
         rutReceptor: "",
@@ -27,7 +26,6 @@ export function Checkout() {
         indicacionesAdicionales: ""
     });
 
-  // Campo obligatorio para Permiso SAG cuando hay especie exótica
     const [permisoSag, setPermisoSag] = useState("");
 
     useEffect(() => {
@@ -40,11 +38,10 @@ export function Checkout() {
             return;
             }
 
-            const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
+            const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
             const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-            // Enriquecer el carrito consultando el detalle directo al BFF para verificar la especie SAG
             const carritoEnriquecido = await Promise.all(
             parsed.map(async (item) => {
                 const idProd = item.idProducto || item.id;
@@ -57,7 +54,8 @@ export function Checkout() {
                     ...item,
                     ...prodBackend,
                     idEspecie: especieBackend,
-                    requiereSag: prodBackend.requiereSag || prodBackend.requiere_sag || parseInt(especieBackend, 10) === 3
+                    requiereSag: prodBackend.requiereSag || prodBackend.requiere_sag || parseInt(especieBackend, 10) === 3,
+                    sagValidated: prodBackend.sagValidated ?? false
                     };
                 }
                 } catch (e) {
@@ -77,7 +75,6 @@ export function Checkout() {
         verificarCarritoYEspecies();
     }, [navigate]);
 
-  // Validar si algún producto en el carrito es de especie exótica (idEspecie === 3 o requiereSag)
     const requiereSagGlobal = carrito.some((item) => {
         const idEspecieNum = parseInt(item.idEspecie || item.id_especie || item.especieId, 10);
         return item.requiereSag === true || item.requiere_sag === true || idEspecieNum === 3;
@@ -106,6 +103,18 @@ export function Checkout() {
         alert(t("login_required_buy") || "Debes iniciar sesión para realizar la compra.");
         navigate("/Login");
         return;
+        }
+
+        // Validación estricta de aprobación SAG por el administrador
+        const productoExoticoSinAprobar = carrito.find(item => {
+            const idEspecieNum = parseInt(item.idEspecie || item.id_especie || item.especieId, 10);
+            const esExotico = item.requiereSag === true || item.requiere_sag === true || idEspecieNum === 3;
+            return esExotico && !item.sagValidated;
+        });
+
+        if (productoExoticoSinAprobar) {
+            setErrorMsg(`El producto "${productoExoticoSinAprobar.nombreProducto || productoExoticoSinAprobar.nombre}" requiere validación y aprobación SAG por parte del administrador.`);
+            return;
         }
 
         if (requiereSagGlobal && !permisoSag.trim()) {
@@ -146,7 +155,6 @@ export function Checkout() {
 
             <Form onSubmit={handlePagar}>
                 <Row className="g-4">
-                {/* Columna Izquierda: Datos de Despacho */}
                 <Col lg={7}>
                     <Card className="p-4 border-0 shadow-sm rounded-3">
                     <h4 className="fw-bold mb-4" style={{ color: "#8B0000" }}>
@@ -266,7 +274,6 @@ export function Checkout() {
                         </Form.Group>
                         </Col>
 
-                        {/* Alerta y campo obligatorio SAG para especies exóticas */}
                         {requiereSagGlobal && (
                         <Col md={12}>
                             <div className="alert alert-warning p-3 mt-3 rounded-3 shadow-sm border-warning">
@@ -290,9 +297,7 @@ export function Checkout() {
                     </Card>
                 </Col>
 
-                {/* Columna Derecha: Resumen de Compra y Método de Pago */}
                 <Col lg={5}>
-                    {/* Resumen de Compra */}
                     <Card className="p-4 border-0 shadow-sm rounded-3 mb-4">
                     <h5 className="fw-bold mb-3" style={{ color: "#8B0000" }}>
                         Resumen de Compra
@@ -322,7 +327,6 @@ export function Checkout() {
                     </div>
                     </Card>
 
-                    {/* Método de Pago */}
                     <Card className="p-4 border-0 shadow-sm rounded-3">
                     <h5 className="fw-bold mb-3" style={{ color: "#8B0000" }}>
                         Método de Pago

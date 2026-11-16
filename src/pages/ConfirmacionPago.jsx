@@ -33,6 +33,27 @@ export const ConfirmacionPago = () => {
                     setEstado("EXITO");
                     setDatosTransaccion(respuesta);
 
+                    // Descuento automático de stock en el microservicio de productos vía BFF
+                    try {
+                        const carritoActual = JSON.parse(localStorage.getItem("carro")) || [];
+                        const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
+                        const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
+                        const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+
+                        for (const item of carritoActual) {
+                            const idProd = item.idProducto || item.id;
+                            const cantidadComprada = item.cantidad || 1;
+
+                            await fetch(`${BFF_URL}/api/bff/productos/${idProd}/descontar-stock`, {
+                                method: "PUT",
+                                headers,
+                                body: JSON.stringify({ cantidadVendida: cantidadComprada })
+                            });
+                        }
+                    } catch (stockErr) {
+                        console.error("Error al actualizar el stock tras el pago:", stockErr);
+                    }
+
                     localStorage.removeItem("carro");
                     sessionStorage.removeItem("idPedidoPendiente");
                 } else {
@@ -53,8 +74,6 @@ export const ConfirmacionPago = () => {
             <NavComponent />
             <main className="petly-simple-page py-5">
                 <Container style={{ maxWidth: "650px" }}>
-
-                    {/* ESTADO 1: PROCESANDO PAGO */}
                     {estado === "PROCESANDO" && (
                         <div className="confirmacion-card text-center py-5">
                             <Spinner animation="border" variant="danger" className="mb-3" style={{ width: "3.5rem", height: "3.5rem" }} />
@@ -65,14 +84,13 @@ export const ConfirmacionPago = () => {
                         </div>
                     )}
 
-                    {/* ESTADO 2: PAGO EXITOSO */}
                     {estado === "EXITO" && (
                         <div className="confirmacion-card text-center">
                             <div className="confirmacion-icon mb-3">✅</div>
                             <span className="section-label">{t("payment_confirmed_label", "PAGO CONFIRMADO")}</span>
                             <h2 className="petly-title mb-2">{t("thank_you_title", "¡Gracias por tu compra!")}</h2>
                             <p className="petly-subtitle mb-4">
-                                {t("order_registered_subtitle", "Hemos registrado tu pedido e iniciado su procesamiento.")}
+                                {t("order_registered_subtitle", "Hemos registrado tu pedido, actualizado el inventario y procesado la transacción.")}
                             </p>
 
                             {datosTransaccion && (
@@ -108,7 +126,6 @@ export const ConfirmacionPago = () => {
                         </div>
                     )}
 
-                    {/* ESTADO 3: PAGO RECHAZADO O CANCELADO */}
                     {estado === "ERROR" && (
                         <div className="confirmacion-card text-center">
                             <div className="confirmacion-icon mb-3">❌</div>
@@ -128,10 +145,11 @@ export const ConfirmacionPago = () => {
                             </div>
                         </div>
                     )}
-
                 </Container>
             </main>
             <FooterComponent />
         </>
     );
 };
+
+export default ConfirmacionPago;
