@@ -4,7 +4,7 @@ import { Container, Button, Spinner } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import NavComponent from "../components/NavComp";
 import FooterComponent from "../components/FooterComp";
-import { confirmarPagoWebpay } from "../utils/pedidoutil";
+import { confirmarPagoWebpay, limpiarPedidoPendienteLocal } from "../utils/pedidoutil";
 
 export const ConfirmacionPago = () => {
     const { t } = useTranslation();
@@ -38,8 +38,7 @@ export const ConfirmacionPago = () => {
                     setDatosTransaccion(respuesta);
 
                     localStorage.removeItem("carro");
-                    sessionStorage.removeItem("idPedidoPendiente");
-                    localStorage.removeItem("idPedidoPendiente");
+                    limpiarPedidoPendienteLocal();
                 } else {
                     setEstado("ERROR");
                     setErrorMsj(t("error_transaction_rejected", "La transacción fue rechazada por la institución financiera."));
@@ -120,7 +119,7 @@ export const ConfirmacionPago = () => {
                             <p className="petly-subtitle text-danger mb-4">{errorMsj}</p>
 
                             <div className="d-flex justify-content-center gap-2">
-                                <Button className="petly-btn" onClick={() => navigate("/checkout")}>
+                                <Button className="petly-btn" onClick={() => navigate("/Checkout")}>
                                     {t("retry_payment_btn", "Reintentar Pago")}
                                 </Button>
                                 <Button className="petly-btn-outline" onClick={() => navigate("/")}>

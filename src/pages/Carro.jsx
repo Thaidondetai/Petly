@@ -8,10 +8,21 @@ import { ProductoContext } from "../context/ProductoContext";
 import { useCurrency } from "../context/CurrencyContext";
 import { DEFAULT_IMAGE, handleImageError } from "../utils/constants";
 import { useTranslation } from "react-i18next";
+import {
+  getIdUsuario,
+  obtenerPedidoPendienteLocal,
+  consultarEstadoPedidoPendiente,
+  pagarPedidoValidado,
+} from "../utils/pedidoutil";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+};
+
+const esEstadoValidado = (estado = "") => {
+  const est = String(estado).toUpperCase();
+  return est === "VALIDADO" || est === "VALIDADO_SAG" || est === "APROBADO" || est === "LISTO_PARA_PAGO";
 };
 
 function Carro() {
@@ -20,6 +31,7 @@ function Carro() {
   const [carritoDetallado, setCarritoDetallado] = useState([]);
   const [total, setTotal] = useState(0);
   const [procesando, setProcesando] = useState(false);
+  const [pedidoPendiente, setPedidoPendiente] = useState(null);
   const navigate = useNavigate();
   const { cargarProductos } = useContext(ProductoContext);
 
@@ -35,6 +47,18 @@ function Carro() {
 
   const guardarCarrito = (items) => {
     localStorage.setItem("carro", JSON.stringify(items));
+  };
+
+  const cargarEstadoValidacion = async () => {
+    const idUsuario = getIdUsuario();
+    const localPedido = obtenerPedidoPendienteLocal(idUsuario);
+    if (localPedido) {
+      setPedidoPendiente(localPedido);
+    }
+    const actualizado = await consultarEstadoPedidoPendiente(localPedido);
+    if (actualizado) {
+      setPedidoPendiente(actualizado);
+    }
   };
 
   const actualizarCarrito = async () => {
@@ -57,7 +81,10 @@ function Carro() {
           carritoValido.push({
             ...item,
             ...res.data,
-            requiereSag: res.data.requiereSag || res.data.requiere_sag || parseInt(res.data.idEspecie || res.data.id_especie, 10) === 3
+            requiereSag:
+              res.data.requiereSag ||
+              res.data.requiere_sag ||
+              parseInt(res.data.idEspecie || res.data.id_especie, 10) === 3,
           });
         } else {
           huboEliminados = true;
@@ -74,7 +101,7 @@ function Carro() {
 
     const detallado = carritoValido.map((item) => ({
       ...item,
-      subtotal: (item.precio || 0) * (item.cantidad || 1)
+      subtotal: (item.precio || 0) * (item.cantidad || 1),
     }));
 
     setCarritoDetallado(detallado);
@@ -84,7 +111,7 @@ function Carro() {
 
   useEffect(() => {
     const cargar = async () => {
-      await actualizarCarrito();
+      await Promise.all([actualizarCarrito(), cargarEstadoValidacion()]);
     };
     cargar();
   }, []);
@@ -107,7 +134,7 @@ function Carro() {
 
     const detallado = actualizado.map((item) => ({
       ...item,
-      subtotal: (item.precio || 0) * item.cantidad
+      subtotal: (item.precio || 0) * item.cantidad,
     }));
     setCarritoDetallado(detallado);
     setTotal(detallado.reduce((acc, p) => acc + p.subtotal, 0));
@@ -119,7 +146,7 @@ function Carro() {
 
     const detallado = carrito.map((item) => ({
       ...item,
-      subtotal: (item.precio || 0) * item.cantidad
+      subtotal: (item.precio || 0) * item.cantidad,
     }));
     setCarritoDetallado(detallado);
     setTotal(detallado.reduce((acc, p) => acc + p.subtotal, 0));
@@ -140,6 +167,20 @@ function Carro() {
 
     navigate("/Checkout");
   };
+
+  const handleIrAPagoValidado = async () => {
+    if (!pedidoPendiente) return;
+    setProcesando(true);
+    try {
+      await pagarPedidoValidado(pedidoPendiente);
+    } catch (err) {
+      alert(err?.response?.data?.mensaje || err.message || "No se pudo iniciar el pago.");
+    } finally {
+      setProcesando(false);
+    }
+  };
+
+  const estaValidado = pedidoPendiente && esEstadoValidado(pedidoPendiente.estado);
 
   return (
     <>
@@ -201,11 +242,37 @@ function Carro() {
                 );
               })}
 
-              <div className="card p-4 mt-4 border-0 shadow-sm d-flex flex-row justify-content-between align-items-center" style={{ borderRadius: "12px" }}>
+              <div className="card p-4 mt-4 border-0 shadow-sm d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3" style={{ borderRadius: "12px" }}>
                 <h3 className="petly-title fs-4 mb-0">{t("total_label")}: {formatPrice(total)}</h3>
-                <Button className="petly-btn" onClick={comprar} disabled={procesando}>
-                  {procesando ? t("processing_btn") : t("buy_btn")}
-                </Button>
+
+                <div className="d-flex flex-wrap align-items-center gap-2">
+                  {pedidoPendiente && (
+                    estaValidado ? (
+                      <Button
+                        variant="success"
+                        size="sm"
+                        className="fw-semibold"
+                        onClick={handleIrAPagoValidado}
+                        disabled={procesando}
+                      >
+                        {procesando ? t("processing_btn") : "Validado"}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="warning"
+                        size="sm"
+                        className="fw-semibold text-dark"
+                        disabled
+                      >
+                        Validación pendiente
+                      </Button>
+                    )
+                  )}
+
+                  <Button className="petly-btn" onClick={comprar} disabled={procesando}>
+                    {procesando ? t("processing_btn") : t("buy_btn")}
+                  </Button>
+                </div>
               </div>
 
               <div className="mt-3">
