@@ -32,7 +32,7 @@ export default function EditarEliminarCategoria() {
     const id = categoriaEditada.idCategoria || categoriaEditada.id;
     const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
     
-    const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
 
     try {
       const response = await fetch(`${BFF_URL}/api/bff/categorias/${id}`, {

@@ -8,7 +8,7 @@ export const ProductoContext = createContext();
 const BFF_URL = import.meta.env.VITE_BFF_URL || 'https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com';
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 };
 

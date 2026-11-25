@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "../../../BFF_petly"
+		},
+		{
+			"path": "../../../Petly_MS-Catalogo"
+		},
+		{
+			"path": "../../../Petly_MS-Producto"
+		},
+		{
+			"path": "../../../MS-Pedido"
+		},
+		{
+			"path": "../.."
+		}
+	]
+}

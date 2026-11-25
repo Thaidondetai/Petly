@@ -5,7 +5,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("id_token") || localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 };
 

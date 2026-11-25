@@ -79,7 +79,11 @@ export const procesarPagoWebpay = async (carrito, totalCalculado, datosEnvio) =>
     const tokenPasarela = data?.token || data?.tokenWebpay || data?.token_ws;
 
     if (urlPasarela && tokenPasarela) {
-        sessionStorage.setItem("idPedidoPendiente", data.idPedido ?? "");
+        const idPedidoCreado = data?.idPedido ?? data?.id ?? "";
+        if (idPedidoCreado !== "") {
+            sessionStorage.setItem("idPedidoPendiente", String(idPedidoCreado));
+            localStorage.setItem("idPedidoPendiente", String(idPedidoCreado));
+        }
         // Redirección mediante POST con el formulario dinámico
         redirigirAWebpay(urlPasarela, tokenPasarela);
     } else if (data?.estado === "PENDIENTE_VALIDACION_SAG") {

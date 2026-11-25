@@ -25,7 +25,7 @@ function DashboardAdmin() {
   }, [productos]);
 
   const handleAprobarSag = async (idProducto) => {
-    const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
+    const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
     const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 

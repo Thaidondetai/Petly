@@ -18,7 +18,11 @@ export const ConfirmacionPago = () => {
 
     useEffect(() => {
         const procesarConfirmacion = async () => {
-            const idPedidoGuardado = sessionStorage.getItem("idPedidoPendiente");
+            const idPedidoGuardado =
+                searchParams.get("idPedido") ||
+                sessionStorage.getItem("idPedidoPendiente") ||
+                localStorage.getItem("idPedidoPendiente") ||
+                null;
 
             if (!tokenWs) {
                 setEstado("ERROR");
@@ -33,29 +37,9 @@ export const ConfirmacionPago = () => {
                     setEstado("EXITO");
                     setDatosTransaccion(respuesta);
 
-                    // Descuento automático de stock en el microservicio de productos vía BFF
-                    try {
-                        const carritoActual = JSON.parse(localStorage.getItem("carro")) || [];
-                        const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
-                        const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
-                        const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
-
-                        for (const item of carritoActual) {
-                            const idProd = item.idProducto || item.id;
-                            const cantidadComprada = item.cantidad || 1;
-
-                            await fetch(`${BFF_URL}/api/bff/productos/${idProd}/descontar-stock`, {
-                                method: "PUT",
-                                headers,
-                                body: JSON.stringify({ cantidadVendida: cantidadComprada })
-                            });
-                        }
-                    } catch (stockErr) {
-                        console.error("Error al actualizar el stock tras el pago:", stockErr);
-                    }
-
                     localStorage.removeItem("carro");
                     sessionStorage.removeItem("idPedidoPendiente");
+                    localStorage.removeItem("idPedidoPendiente");
                 } else {
                     setEstado("ERROR");
                     setErrorMsj(t("error_transaction_rejected", "La transacción fue rechazada por la institución financiera."));
@@ -67,7 +51,7 @@ export const ConfirmacionPago = () => {
         };
 
         procesarConfirmacion();
-    }, [tokenWs, t]);
+    }, [tokenWs, searchParams, t]);
 
     return (
         <>

@@ -22,10 +22,18 @@ function Home() {
     const texto = busqueda.toLowerCase();
     const nombre = p.nombreProducto ? p.nombreProducto.toLowerCase() : "";
     const descripcion = p.descripcion ? p.descripcion.toLowerCase() : "";
+    const idCategoriaProducto = p.idCategoria ?? p.id_categoria ?? p.categoria?.idCategoria;
+
+    const coincideCategoria =
+      categoriaSeleccionada === null ||
+      categoriaSeleccionada === undefined ||
+      (idCategoriaProducto !== null &&
+        idCategoriaProducto !== undefined &&
+        Number(idCategoriaProducto) === Number(categoriaSeleccionada));
 
     return (
-      nombre.includes(texto) ||
-      descripcion.includes(texto)
+      coincideCategoria &&
+      (nombre.includes(texto) || descripcion.includes(texto))
     );
   });
 

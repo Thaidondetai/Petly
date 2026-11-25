@@ -38,7 +38,7 @@ export function Checkout() {
             return;
             }
 
-            const BFF_URL = import.meta.env.VITE_BFF_URL || "http://localhost:8083";
+            const BFF_URL = import.meta.env.VITE_BFF_URL || "https://jbwthrmbj2.execute-api.us-east-1.amazonaws.com";
             const token = localStorage.getItem("access_token") || localStorage.getItem("id_token");
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -54,8 +54,7 @@ export function Checkout() {
                     ...item,
                     ...prodBackend,
                     idEspecie: especieBackend,
-                    requiereSag: prodBackend.requiereSag || prodBackend.requiere_sag || parseInt(especieBackend, 10) === 3,
-                    sagValidated: prodBackend.sagValidated ?? false
+                    requiereSag: prodBackend.requiereSag || prodBackend.requiere_sag || parseInt(especieBackend, 10) === 3
                     };
                 }
                 } catch (e) {
@@ -103,18 +102,6 @@ export function Checkout() {
         alert(t("login_required_buy") || "Debes iniciar sesión para realizar la compra.");
         navigate("/Login");
         return;
-        }
-
-        // Validación estricta de aprobación SAG por el administrador
-        const productoExoticoSinAprobar = carrito.find(item => {
-            const idEspecieNum = parseInt(item.idEspecie || item.id_especie || item.especieId, 10);
-            const esExotico = item.requiereSag === true || item.requiere_sag === true || idEspecieNum === 3;
-            return esExotico && !item.sagValidated;
-        });
-
-        if (productoExoticoSinAprobar) {
-            setErrorMsg(`El producto "${productoExoticoSinAprobar.nombreProducto || productoExoticoSinAprobar.nombre}" requiere validación y aprobación SAG por parte del administrador.`);
-            return;
         }
 
         if (requiereSagGlobal && !permisoSag.trim()) {
